@@ -16,6 +16,9 @@ class Game {
         // Background music
         this.backgroundMusic = null;
         this.musicEnabled = true; // Default to ON
+
+        // UI click sound
+        this.uiClickSound = null;
         
         // Input
         this.keys = {};
@@ -197,6 +200,9 @@ class Game {
         
         // Initialize emoji system
         this.emojiSystem = new EmojiSystem();
+
+        // Initialize movement sound (uses Sound FX toggle)
+        this.initMoveSound();
         
         // Setup background music
         this.setupBackgroundMusic();
@@ -209,11 +215,85 @@ class Game {
         this.gameLoop(0);
     }
 
+    initUiClickSound() {
+        if (this.uiClickSound) return;
+        try {
+            this.uiClickSound = new Audio('/assets/computer_click.mp3');
+            this.uiClickSound.volume = 0.4;
+        } catch (e) {
+            console.warn('Failed to initialize UI click sound:', e);
+        }
+    }
+
+    playUiClickSound() {
+        if (!this.uiClickSound) {
+            this.initUiClickSound();
+        }
+        if (!this.uiClickSound) return;
+
+        try {
+            this.uiClickSound.currentTime = 0;
+            this.uiClickSound.play().catch(() => {
+                // Ignore play errors (e.g., autoplay policies)
+            });
+        } catch (e) {
+            // Fail silently
+        }
+    }
+
+    initMoveSound() {
+        if (this.movementSound) return;
+        try {
+            this.movementSound = new Audio('/assets/ssd.mp3');
+            this.movementSound.loop = true; // ensure loop
+            this.movementSound.volume = 0.9; // louder so it’s audible
+            this.isMovementSoundPlaying = false;
+        } catch (e) {
+            console.warn('Failed to initialize movement sound:', e);
+        }
+    }
+
+    playMovementSound() {
+        if (!this.movementSound) {
+            this.initMoveSound();
+        }
+        if (!this.movementSound) return;
+
+        // Respect Sound FX toggle (emoji system controls soundEnabled)
+        if (this.emojiSystem && this.emojiSystem.soundEnabled === false) {
+            this.stopMovementSound();
+            return;
+        }
+
+        if (this.isMovementSoundPlaying) return;
+
+        try {
+            // Do not reset currentTime when looping; just start if not playing
+            this.movementSound.play().then(() => {
+                this.isMovementSoundPlaying = true;
+            }).catch(() => {
+                // Ignore play errors (e.g., autoplay policies)
+            });
+        } catch (e) {
+            // Fail silently
+        }
+    }
+
+    stopMovementSound() {
+        if (!this.movementSound) return;
+        try {
+            this.movementSound.pause();
+            this.isMovementSoundPlaying = false;
+        } catch (e) {
+            // Fail silently
+        }
+    }
+
     setupBackgroundMusic() {
         // Create audio element for background music
         this.backgroundMusic = new Audio('/assets/lofi v4 sadder.mp3');
         this.backgroundMusic.loop = true;
-        this.backgroundMusic.volume = 0.5; // Set volume to 50%
+        this.backgroundMusic.volume = 0.4; // Set volume to 50%
         
         // Handle audio loading errors
         this.backgroundMusic.addEventListener('error', (e) => {
@@ -277,6 +357,8 @@ class Game {
         const endSessionButton = document.getElementById('end-session-button');
         if (endSessionButton) {
             endSessionButton.addEventListener('click', () => {
+                // UI click sound
+                this.playUiClickSound();
                 // Pause background music when ending session
                 if (this.backgroundMusic) {
                     this.backgroundMusic.pause();
@@ -460,6 +542,8 @@ class Game {
 
         // Close button handler
         closeButton.onclick = () => {
+            // UI click sound
+            this.playUiClickSound();
             resultsScreen.style.display = 'none';
             // Optionally reset the game or redirect
             location.reload(); // Reload to start fresh
@@ -500,6 +584,14 @@ class Game {
             this.localPenguin.x += dx;
             this.localPenguin.y += dy;
             this.localPenguin.direction = direction;
+
+            // Movement sound: play while moving, stop when idle
+            const isMoving = direction !== 'idle';
+            if (isMoving) {
+                this.playMovementSound();
+            } else {
+                this.stopMovementSound();
+            }
             
             // Update penguin
             this.localPenguin.update(deltaTime, this.iceberg);

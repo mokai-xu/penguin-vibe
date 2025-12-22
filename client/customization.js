@@ -7,6 +7,7 @@ class Customization {
         this.selectedHat = 'none';
         
         this.setupEventListeners();
+        this.setupClickSounds();
         this.renderPreview();
     }
 
@@ -29,6 +30,26 @@ class Customization {
         // Join button
         this.joinButton.addEventListener('click', () => {
             this.onJoin();
+        });
+    }
+
+    setupClickSounds() {
+        const playClick = () => {
+            if (window.game && typeof window.game.playUiClickSound === 'function') {
+                window.game.playUiClickSound();
+            }
+        };
+
+        // Buttons on the customization screen (e.g., Join)
+        const buttons = document.querySelectorAll('#customization-screen button');
+        buttons.forEach(button => {
+            button.addEventListener('click', playClick);
+        });
+
+        // Hat selections (party hat, egg, etc.)
+        const hatOptions = this.hatGrid.querySelectorAll('.hat-option');
+        hatOptions.forEach(option => {
+            option.addEventListener('click', playClick);
         });
     }
 
