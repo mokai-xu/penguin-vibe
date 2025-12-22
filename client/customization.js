@@ -1,20 +1,76 @@
 class Customization {
     constructor() {
+        this.modeGrid = document.getElementById('mode-grid');
         this.hatGrid = document.getElementById('hat-grid');
+        this.hatSection = document.getElementById('hat-section');
         this.previewCanvas = document.getElementById('preview-canvas');
         this.joinButton = document.getElementById('join-button');
         
+        this.selectedMode = 'default';
         this.selectedHat = 'none';
+        
+        // Define hats for each mode
+        this.defaultHats = [
+            { hat: 'none', emoji: 'None', name: 'None' },
+            { hat: 'party', emoji: '🎉', name: 'Party Hat' },
+            { hat: 'egg', emoji: '🥚', name: 'Egg' },
+            { hat: 'fedora', emoji: '🎩', name: 'Fedora' },
+            { hat: 'magician', emoji: '🎩', name: 'Magician' },
+            { hat: 'bow', emoji: '🎀', name: 'Red Bow' },
+            { hat: 'cowboy', emoji: '🤠', name: 'Cowboy' },
+            { hat: 'watermelon', emoji: '🍉', name: 'Watermelon' },
+            { hat: 'baseball', emoji: '⚾', name: 'Cap' }
+        ];
+        
+        this.holidayHats = [
+            { hat: 'none', emoji: 'None', name: 'None' },
+            { hat: 'santa', emoji: '🎅', name: 'Santa Hat' },
+            { hat: 'blue_party', emoji: '🎉', name: 'Blue Party Hat' },
+            { hat: 'yellow_party', emoji: '🎉', name: 'Yellow Party Hat' },
+            { hat: 'reindeer', emoji: '🦌', name: 'Reindeer Ears' },
+            { hat: 'beanie', emoji: '🧶', name: 'Winter Beanie' }
+        ];
         
         this.setupEventListeners();
         this.setupClickSounds();
+        this.renderHats();
         this.renderPreview();
+        // Set initial background color
+        this.updateBackgroundColor();
     }
 
     setupEventListeners() {
-        // Hat selection
-        this.hatGrid.querySelectorAll('.hat-option').forEach(option => {
+        // Mode selection
+        this.modeGrid.querySelectorAll('.mode-option').forEach(option => {
             option.addEventListener('click', () => {
+                // Remove previous selection
+                this.modeGrid.querySelectorAll('.mode-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                // Add selection to clicked option
+                option.classList.add('selected');
+                this.selectedMode = option.getAttribute('data-mode');
+                this.selectedHat = 'none'; // Reset hat selection
+                
+                // Update background color based on mode
+                this.updateBackgroundColor();
+                
+                this.renderHats();
+                this.renderPreview();
+            });
+        });
+        
+        // Set default mode as selected
+        const defaultMode = this.modeGrid.querySelector('[data-mode="default"]');
+        if (defaultMode) {
+            defaultMode.classList.add('selected');
+        }
+
+        // Hat selection
+        this.hatGrid.addEventListener('click', (e) => {
+            const option = e.target.closest('.hat-option');
+            if (option) {
                 // Remove previous selection
                 this.hatGrid.querySelectorAll('.hat-option').forEach(opt => {
                     opt.classList.remove('selected');
@@ -24,12 +80,43 @@ class Customization {
                 option.classList.add('selected');
                 this.selectedHat = option.getAttribute('data-hat');
                 this.renderPreview();
-            });
+            }
         });
 
         // Join button
         this.joinButton.addEventListener('click', () => {
             this.onJoin();
+        });
+    }
+    
+    renderHats() {
+        // Clear existing hats
+        this.hatGrid.innerHTML = '';
+        
+        // Get hats for current mode
+        const hats = this.selectedMode === 'holiday' ? this.holidayHats : this.defaultHats;
+        
+        // Render hats
+        hats.forEach(hatData => {
+            const hatOption = document.createElement('div');
+            hatOption.className = 'hat-option';
+            hatOption.setAttribute('data-hat', hatData.hat);
+            if (hatData.hat === this.selectedHat) {
+                hatOption.classList.add('selected');
+            }
+            
+            const preview = document.createElement('div');
+            preview.className = 'hat-preview';
+            preview.textContent = hatData.emoji;
+            hatOption.appendChild(preview);
+            
+            if (hatData.name !== 'None') {
+                const span = document.createElement('span');
+                span.textContent = hatData.name;
+                hatOption.appendChild(span);
+            }
+            
+            this.hatGrid.appendChild(hatOption);
         });
     }
 
@@ -82,6 +169,7 @@ class Customization {
 
     onJoin() {
         const customizationData = {
+            mode: this.selectedMode,
             hat: this.selectedHat
         };
         
@@ -97,8 +185,20 @@ class Customization {
         }));
     }
 
+    updateBackgroundColor() {
+        const customizationScreen = document.getElementById('customization-screen');
+        if (customizationScreen) {
+            if (this.selectedMode === 'holiday') {
+                customizationScreen.style.background = 'rgba(45, 80, 22, 0.95)'; // Pine green
+            } else {
+                customizationScreen.style.background = '#FFB6C1'; // Pink
+            }
+        }
+    }
+
     getCustomization() {
         return {
+            mode: this.selectedMode,
             hat: this.selectedHat
         };
     }

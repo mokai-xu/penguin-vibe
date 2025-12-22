@@ -13,6 +13,20 @@
             <p class="subtitle">This is a safe place to express yourself.</p>
             
             <div class="customization-section">
+                <h2>Choose a Mode</h2>
+                <div class="mode-grid" id="mode-grid">
+                    <div class="mode-option" data-mode="default">
+                        <div class="mode-preview">🌊</div>
+                        <span>Default</span>
+                    </div>
+                    <div class="mode-option" data-mode="holiday">
+                        <div class="mode-preview">❄️</div>
+                        <span>Holiday</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="customization-section" id="hat-section">
                 <h2>Pick a Hat</h2>
                 <div class="hat-grid" id="hat-grid">
                     <div class="hat-option" data-hat="none">
@@ -70,21 +84,7 @@
         <button id="instructions-button" class="instructions-button" title="Instructions">ℹ</button>
         
         <div class="emoji-ui">
-            <button class="emoji-button" data-emoji="happy" title="Happy (1)">😊</button>
-            <button class="emoji-button" data-emoji="sad" title="Sad (2)">😢</button>
-            <button class="emoji-button" data-emoji="relieved" title="Relieved (3)">😌</button>
-            <button class="emoji-button" data-emoji="silly" title="Silly (4)">😜</button>
-            <button class="emoji-button" data-emoji="surprised" title="Surprised (5)">😲</button>
-            <button class="emoji-button" data-emoji="laughing" title="Laughing (6)">😂</button>
-            <button class="emoji-button" data-emoji="cool" title="Cool (7)">😎</button>
-            <button class="emoji-button" data-emoji="cowboy_face" title="Cowboy (8)">🤠</button>
-            <button class="emoji-button" data-emoji="angry" title="Angry (9)">😠</button>
-            <button class="emoji-button" data-emoji="clown" title="Clown (0)">🤡</button>
-            <button class="emoji-button" data-emoji="tired" title="Tired">😩</button>
-            <button class="emoji-button" data-emoji="dizzy" title="Dizzy">😵‍💫</button>
-            <button class="emoji-button" data-emoji="thinking" title="Thinking">🤔</button>
-            <button class="emoji-button" data-emoji="hot" title="Hot">🥵</button>
-            <button class="emoji-button" data-emoji="smirk" title="Smirk">😏</button>
+            <!-- Emoji buttons will be generated dynamically based on mode -->
         </div>
 
 
@@ -137,6 +137,7 @@
 
     <script src="spriteSheet.js"></script>
     <script src="iceberg.js"></script>
+    <script src="holidayWorld.js"></script>
     <script src="penguin.js"></script>
     <script src="emoji.js"></script>
     <script src="customization.js"></script>

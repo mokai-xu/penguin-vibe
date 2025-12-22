@@ -9,6 +9,8 @@ class Game {
         
         // Game state
         this.iceberg = null;
+        this.holidayWorld = null;
+        this.mode = 'default'; // 'default' or 'holiday'
         this.localPenguin = null;
         this.emojiSystem = null;
         this.customizationData = null; // Store customization for results screen
@@ -61,6 +63,114 @@ class Game {
             positive: []
         };
         this.loadEncouragements();
+        
+        // Holiday wishes for Christmas mode
+        this.holidayWishes = [
+            "Hope you have yourself a holiday to remember!",
+            "Wishing you a season filled with warmth and joy!",
+            "May your holidays be merry and bright!",
+            "Sending you festive cheer and holiday happiness!",
+            "Hope your holidays sparkle with joy and laughter!",
+            "Wishing you a wonderful holiday season!",
+            "May your holidays be filled with love and laughter!",
+            "Hope you have a magical and memorable holiday!",
+            "Wishing you peace, joy, and happiness this holiday season!",
+            "May your holidays be as wonderful as you are!",
+            "Hope your holiday season is filled with special moments!",
+            "Wishing you a holiday filled with warmth and wonder!",
+            "May your holidays be merry, bright, and full of cheer!",
+            "Hope you have a holiday season that's simply magical!",
+            "Wishing you joy, peace, and happiness this holiday!",
+            "May your holidays be filled with love and good cheer!",
+            "Hope you have a holiday to remember and cherish!",
+            "Wishing you a season of joy, laughter, and love!",
+            "May your holidays sparkle with happiness and joy!",
+            "Hope your holiday season is filled with wonderful memories!",
+            "Wishing you a festive and joyful holiday season!",
+            "May your holidays be merry, bright, and absolutely wonderful!",
+            "Hope you have a holiday filled with love and laughter!",
+            "Wishing you peace, happiness, and holiday cheer!",
+            "May your holidays be as special and wonderful as you!",
+            "Hope your holiday season brings you endless joy!",
+            "Wishing you a magical holiday filled with happiness!",
+            "May your holidays be filled with warmth and wonder!",
+            "Hope you have a holiday season that's truly magical!",
+            "Wishing you joy, laughter, and love this holiday!",
+            "May your holidays be merry, bright, and full of cheer!",
+            "Hope you have a holiday to remember forever!",
+            "Wishing you a season filled with special moments!",
+            "May your holidays sparkle with joy and happiness!",
+            "Hope your holiday season is filled with wonderful memories!",
+            "Wishing you a festive and joyful holiday!",
+            "May your holidays be merry, bright, and absolutely perfect!",
+            "Hope you have a holiday filled with love and cheer!",
+            "Wishing you peace, happiness, and holiday magic!",
+            "May your holidays be as wonderful and special as you!",
+            "Hope your holiday season brings you endless happiness!",
+            "Wishing you a magical holiday filled with joy!",
+            "May your holidays be filled with warmth and love!",
+            "Hope you have a holiday season that's truly wonderful!",
+            "Wishing you joy, laughter, and endless cheer!",
+            "May your holidays be merry, bright, and full of love!",
+            "Hope you have a holiday to remember and treasure!",
+            "Wishing you a season filled with happiness and joy!",
+            "May your holidays sparkle with magic and wonder!",
+            "Hope your holiday season is filled with special moments!",
+            "Wishing you a festive and joyful holiday season!",
+            "May your holidays be merry, bright, and absolutely amazing!",
+            "Hope you have a holiday filled with love and happiness!",
+            "Wishing you peace, joy, and holiday cheer!",
+            "May your holidays be as special and wonderful as you are!",
+            "Hope your holiday season brings you endless joy and laughter!",
+            "Wishing you a magical holiday filled with warmth!",
+            "May your holidays be filled with wonder and happiness!",
+            "Hope you have a holiday season that's truly magical and special!",
+            "Wishing you joy, laughter, and holiday magic!",
+            "May your holidays be merry, bright, and full of wonderful moments!",
+            "Hope you have a holiday to remember with a smile!",
+            "Wishing you a season filled with love and joy!",
+            "May your holidays sparkle with happiness and cheer!",
+            "Hope your holiday season is filled with wonderful memories to treasure!",
+            "Wishing you a festive and joyful holiday filled with love!",
+            "May your holidays be merry, bright, and absolutely perfect in every way!",
+            "Hope you have a holiday filled with warmth and happiness!",
+            "Wishing you peace, joy, and endless holiday cheer!",
+            "May your holidays be as wonderful and special as you deserve!",
+            "Hope your holiday season brings you endless happiness and love!",
+            "Wishing you a magical holiday filled with joy and laughter!",
+            "May your holidays be filled with wonder, love, and happiness!",
+            "Hope you have a holiday season that's truly magical and unforgettable!",
+            "Wishing you joy, laughter, and holiday magic that lasts all year!",
+            "May your holidays be merry, bright, and full of wonderful moments to cherish!",
+            "Hope you have a holiday to remember with a heart full of joy!",
+            "Wishing you a season filled with love, laughter, and endless happiness!",
+            "May your holidays sparkle with magic, wonder, and joy!",
+            "Hope your holiday season is filled with special moments to treasure forever!",
+            "Wishing you a festive and joyful holiday filled with warmth and love!",
+            "May your holidays be merry, bright, and absolutely perfect in every wonderful way!",
+            "Hope you have a holiday filled with love, laughter, and happiness!",
+            "Wishing you peace, joy, and holiday cheer that fills your heart!",
+            "May your holidays be as special and wonderful as you make them!",
+            "Hope your holiday season brings you endless joy, laughter, and love!",
+            "Wishing you a magical holiday filled with warmth and happiness!",
+            "May your holidays be filled with wonder, love, and endless cheer!",
+            "Hope you have a holiday season that's truly magical, special, and unforgettable!",
+            "Wishing you joy, laughter, and holiday magic that brings smiles all year long!",
+            "May your holidays be merry, bright, and full of wonderful moments to remember!",
+            "Hope you have a holiday to remember with a heart full of joy and love!",
+            "Wishing you a season filled with love, laughter, and endless happiness and cheer!",
+            "May your holidays sparkle with magic, wonder, joy, and all things wonderful!",
+            "Hope your holiday season is filled with special moments to treasure and cherish forever!",
+            "Wishing you a festive and joyful holiday filled with warmth, love, and happiness!",
+            "May your holidays be merry, bright, and absolutely perfect in every wonderful and magical way!",
+            "Hope you have a holiday filled with love, laughter, happiness, and endless joy!",
+            "Wishing you peace, joy, and holiday cheer that fills your heart with warmth!",
+            "May your holidays be as special and wonderful as you make every moment!",
+            "Hope your holiday season brings you endless joy, laughter, love, and happiness!",
+            "Wishing you a magical holiday filled with warmth, happiness, and all things wonderful!",
+            "May your holidays be filled with wonder, love, endless cheer, and magical moments!",
+            "Hope you have a holiday season that's truly magical, special, unforgettable, and absolutely perfect!"
+        ];
         
         // Wait for customization
         window.addEventListener('customizationComplete', (e) => {
@@ -331,27 +441,51 @@ class Game {
     }
 
     initializeGame(customization) {
-        // Initialize iceberg in world space (centered at world origin)
-        this.iceberg = new Iceberg(this.canvas, 0, 0);
+        // Store mode
+        this.mode = customization.mode || 'default';
         
-        // Create local penguin at world origin (will be centered on screen via camera)
-        this.localPenguin = new Penguin(
-            0, // World X (camera will center on this)
-            0, // World Y (camera will center on this)
-            Penguin.defaultColor,
-            customization.hat,
-            'local',
-            true
-        );
+        // Initialize world based on mode
+        if (this.mode === 'holiday') {
+            this.holidayWorld = new HolidayWorld(this.canvas, 0, 0);
+            // Find a tree to start the penguin on
+            let startX = 0, startY = 0;
+            if (this.holidayWorld.trees.length > 0) {
+                const firstTree = this.holidayWorld.trees[0];
+                startX = firstTree.x;
+                startY = firstTree.y;
+            }
+            this.localPenguin = new Penguin(
+                startX,
+                startY,
+                Penguin.defaultColor,
+                customization.hat,
+                'local',
+                true
+            );
+        } else {
+            // Initialize iceberg in world space (centered at world origin)
+            this.iceberg = new Iceberg(this.canvas, 0, 0);
+            this.localPenguin = new Penguin(
+                0, // World X (camera will center on this)
+                0, // World Y (camera will center on this)
+                Penguin.defaultColor,
+                customization.hat,
+                'local',
+                true
+            );
+        }
         
         // Initialize camera to center on penguin
-        this.camera.x = 0;
-        this.camera.y = 0;
-        this.camera.targetX = 0;
-        this.camera.targetY = 0;
+        this.camera.x = this.localPenguin.x;
+        this.camera.y = this.localPenguin.y;
+        this.camera.targetX = this.localPenguin.x;
+        this.camera.targetY = this.localPenguin.y;
         
-        // Initialize emoji system
-        this.emojiSystem = new EmojiSystem();
+        // Initialize emoji system with mode (after game container is visible)
+        // Use a small delay to ensure DOM is ready
+        setTimeout(() => {
+            this.emojiSystem = new EmojiSystem(this.mode);
+        }, 50);
 
         // Initialize movement sound (uses Sound FX toggle)
         this.initMoveSound();
@@ -448,8 +582,9 @@ class Game {
     }
 
     setupBackgroundMusic() {
-        // Create audio element for background music
-        this.backgroundMusic = new Audio('/assets/lofi v4 sadder.mp3');
+        // Create audio element for background music based on mode
+        const musicFile = this.mode === 'holiday' ? '/assets/christmas_jazz.mp3' : '/assets/lofi v4 sadder.mp3';
+        this.backgroundMusic = new Audio(musicFile);
         this.backgroundMusic.loop = true;
         this.backgroundMusic.volume = 0.4; // Set volume to 50%
         
@@ -514,7 +649,11 @@ class Game {
     setupEndSessionButton() {
         const endSessionButton = document.getElementById('end-session-button');
         if (endSessionButton) {
-            endSessionButton.addEventListener('click', () => {
+            // Remove any existing listeners to avoid duplicates
+            const newButton = endSessionButton.cloneNode(true);
+            endSessionButton.parentNode.replaceChild(newButton, endSessionButton);
+            
+            newButton.addEventListener('click', () => {
                 // UI click sound
                 this.playUiClickSound();
                 // Pause background music when ending session
@@ -581,6 +720,11 @@ class Game {
 
     endSession() {
         // Get emoji statistics
+        if (!this.emojiSystem) {
+            console.error('Emoji system not initialized');
+            return;
+        }
+        
         const stats = this.emojiSystem.getEmojiStats();
         
         // Generate mood summary and encouragement
@@ -648,6 +792,14 @@ class Game {
     }
 
     generateEncouragement(stats) {
+        // In holiday mode, use festive holiday wishes instead
+        if (this.mode === 'holiday') {
+            const timestamp = Date.now();
+            const seed = timestamp + (stats.total || 0) + Object.keys(stats.counts || {}).length;
+            const wishIndex = seed % this.holidayWishes.length;
+            return this.holidayWishes[wishIndex];
+        }
+        
         const { counts, total } = stats;
         
         // Select encouragement based on mood
@@ -711,6 +863,13 @@ class Game {
         const encouragementDiv = document.getElementById('encouragement');
         const closeButton = document.getElementById('close-results-button');
         const penguinCanvas = document.getElementById('results-penguin-canvas');
+        
+        // Add mode class for styling
+        if (this.mode === 'holiday') {
+            resultsScreen.classList.add('holiday-mode');
+        } else {
+            resultsScreen.classList.remove('holiday-mode');
+        }
 
         // Render penguin with customization
         if (penguinCanvas && this.customizationData) {
@@ -743,8 +902,9 @@ class Game {
             <p>${moodSummary.text}</p>
         `;
 
+        const encouragementTitle = this.mode === 'holiday' ? '🎄 Your Holiday Wish' : '💝 Your Daily Encouragement';
         encouragementDiv.innerHTML = `
-            <h3>💝 Your Daily Encouragement</h3>
+            <h3>${encouragementTitle}</h3>
             <p>${encouragement}</p>
         `;
 
@@ -762,8 +922,10 @@ class Game {
     }
 
     update(deltaTime) {
-        // Update iceberg
-        if (this.iceberg) {
+        // Update world based on mode
+        if (this.mode === 'holiday' && this.holidayWorld) {
+            this.holidayWorld.update(deltaTime);
+        } else if (this.iceberg) {
             this.iceberg.update(deltaTime);
         }
         
@@ -845,7 +1007,11 @@ class Game {
             }
             
             // Update penguin
-            this.localPenguin.update(deltaTime, this.iceberg);
+            if (this.mode === 'holiday') {
+                this.localPenguin.update(deltaTime, null); // No iceberg in holiday mode
+            } else {
+                this.localPenguin.update(deltaTime, this.iceberg);
+            }
         }
     }
 
@@ -860,12 +1026,24 @@ class Game {
         const cameraOffsetY = this.canvas.height / 2 - this.camera.y;
         this.ctx.translate(cameraOffsetX, cameraOffsetY);
         
-        // Draw ocean pattern (in world space)
-        this.drawOcean();
-        
-        // Draw iceberg (in world space)
-        if (this.iceberg) {
-            this.iceberg.render(this.ctx);
+        // Draw world based on mode
+        if (this.mode === 'holiday' && this.holidayWorld) {
+            // Draw holiday world
+            this.holidayWorld.render(
+                this.ctx,
+                this.camera.x,
+                this.camera.y,
+                this.canvas.width,
+                this.canvas.height
+            );
+        } else {
+            // Draw ocean pattern (in world space)
+            this.drawOcean();
+            
+            // Draw iceberg (in world space)
+            if (this.iceberg) {
+                this.iceberg.render(this.ctx);
+            }
         }
         
         // Draw local penguin (in world space)

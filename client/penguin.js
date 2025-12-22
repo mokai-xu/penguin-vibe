@@ -596,6 +596,91 @@ class Penguin {
                 ctx.fillStyle = '#000080';
                 ctx.fillRect(-8, hatY + 2, 16, 1);
                 break;
+                
+            case 'santa':
+                // Santa hat
+                ctx.fillStyle = '#FF0000';
+                ctx.beginPath();
+                ctx.moveTo(0, hatY - 8);
+                ctx.lineTo(-6, hatY + 4);
+                ctx.lineTo(6, hatY + 4);
+                ctx.closePath();
+                ctx.fill();
+                ctx.strokeStyle = '#2C2C2C';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+                // White trim
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fillRect(-6, hatY + 2, 12, 2);
+                // White pom-pom
+                ctx.beginPath();
+                ctx.arc(0, hatY - 8, 2, 0, Math.PI * 2);
+                ctx.fill();
+                break;
+                
+            case 'blue_party':
+                // Blue party hat
+                ctx.fillStyle = '#4169E1';
+                ctx.beginPath();
+                ctx.moveTo(0, hatY);
+                ctx.lineTo(-6, hatY + 8);
+                ctx.lineTo(6, hatY + 8);
+                ctx.closePath();
+                ctx.fill();
+                ctx.strokeStyle = '#2C2C2C';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+                break;
+                
+            case 'yellow_party':
+                // Yellow party hat
+                ctx.fillStyle = '#FFD700';
+                ctx.beginPath();
+                ctx.moveTo(0, hatY);
+                ctx.lineTo(-6, hatY + 8);
+                ctx.lineTo(6, hatY + 8);
+                ctx.closePath();
+                ctx.fill();
+                ctx.strokeStyle = '#2C2C2C';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+                break;
+                
+            case 'reindeer':
+                // Reindeer ears
+                ctx.fillStyle = '#8B4513';
+                // Left ear
+                ctx.beginPath();
+                ctx.ellipse(-5, hatY, 3, 5, -0.3, 0, Math.PI * 2);
+                ctx.fill();
+                // Right ear
+                ctx.beginPath();
+                ctx.ellipse(5, hatY, 3, 5, 0.3, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = '#2C2C2C';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.ellipse(-5, hatY, 3, 5, -0.3, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.ellipse(5, hatY, 3, 5, 0.3, 0, Math.PI * 2);
+                ctx.stroke();
+                break;
+                
+            case 'beanie':
+                // Winter beanie
+                ctx.fillStyle = '#FF69B4';
+                ctx.fillRect(-7, hatY, 14, 5);
+                ctx.strokeRect(-7, hatY, 14, 5);
+                // Pom-pom
+                ctx.fillStyle = '#FFFFFF';
+                ctx.beginPath();
+                ctx.arc(0, hatY, 2, 0, Math.PI * 2);
+                ctx.fill();
+                // Brim
+                ctx.fillStyle = '#FF69B4';
+                ctx.fillRect(-8, hatY + 4, 16, 1);
+                break;
         }
         
         ctx.restore(); // Restore after scaling hat
@@ -605,6 +690,7 @@ class Penguin {
         if (!emojiObj) return;
         
         const emojiMap = {
+            // Default emojis
             happy: '😊',
             sad: '😢',
             relieved: '😌',
@@ -619,7 +705,18 @@ class Penguin {
             dizzy: '😵‍💫',
             thinking: '🤔',
             hot: '🥵',
-            smirk: '😏'
+            smirk: '😏',
+            // Holiday emojis
+            party_popper: '🎉',
+            gift: '🎁',
+            confetti: '🎊',
+            christmas_tree: '🎄',
+            partying: '🥳',
+            balloon: '🎈',
+            sparkles: '✨',
+            birthday_cake: '🎂',
+            dancing_woman: '💃',
+            dancing_man: '🕺'
         };
         
         const emojiText = emojiMap[emojiObj.type] || '😊';

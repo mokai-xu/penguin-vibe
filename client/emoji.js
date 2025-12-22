@@ -1,12 +1,84 @@
 class EmojiSystem {
-    constructor() {
-        this.emojiButtons = document.querySelectorAll('.emoji-button');
+    constructor(mode = 'default') {
+        this.mode = mode;
+        this.emojiButtons = [];
         this.emojiCounts = {}; // Track emoji usage: { emojiType: count }
         this.audioContext = null;
         this.soundEnabled = true; // Sound FX toggle state
         this.initAudio();
+        // Setup emojis first, then event listeners
+        this.setupEmojis();
         this.setupEventListeners();
         this.setupSoundToggle();
+    }
+    
+    setupEmojis() {
+        const emojiContainer = document.querySelector('.emoji-ui');
+        if (!emojiContainer) {
+            // Retry if container doesn't exist yet (might be hidden)
+            // But limit retries to avoid infinite loop
+            if (!this._setupRetries) {
+                this._setupRetries = 0;
+            }
+            if (this._setupRetries < 10) {
+                this._setupRetries++;
+                setTimeout(() => this.setupEmojis(), 100);
+            } else {
+                console.warn('Emoji container not found after retries');
+            }
+            return;
+        }
+        this._setupRetries = 0; // Reset on success
+        
+        // Clear existing buttons
+        emojiContainer.innerHTML = '';
+        
+        // Define emojis for each mode
+        const defaultEmojis = [
+            { emoji: 'happy', icon: '😊', title: 'Happy (1)' },
+            { emoji: 'sad', icon: '😢', title: 'Sad (2)' },
+            { emoji: 'relieved', icon: '😌', title: 'Relieved (3)' },
+            { emoji: 'silly', icon: '😜', title: 'Silly (4)' },
+            { emoji: 'surprised', icon: '😲', title: 'Surprised (5)' },
+            { emoji: 'laughing', icon: '😂', title: 'Laughing (6)' },
+            { emoji: 'cool', icon: '😎', title: 'Cool (7)' },
+            { emoji: 'cowboy_face', icon: '🤠', title: 'Cowboy (8)' },
+            { emoji: 'angry', icon: '😠', title: 'Angry (9)' },
+            { emoji: 'clown', icon: '🤡', title: 'Clown (0)' },
+            { emoji: 'tired', icon: '😩', title: 'Tired' },
+            { emoji: 'dizzy', icon: '😵‍💫', title: 'Dizzy' },
+            { emoji: 'thinking', icon: '🤔', title: 'Thinking' },
+            { emoji: 'hot', icon: '🥵', title: 'Hot' },
+            { emoji: 'smirk', icon: '😏', title: 'Smirk' }
+        ];
+        
+        const holidayEmojis = [
+            { emoji: 'party_popper', icon: '🎉', title: 'Party Popper (1)' },
+            { emoji: 'gift', icon: '🎁', title: 'Gift (2)' },
+            { emoji: 'confetti', icon: '🎊', title: 'Confetti (3)' },
+            { emoji: 'christmas_tree', icon: '🎄', title: 'Christmas Tree (4)' },
+            { emoji: 'partying', icon: '🥳', title: 'Partying (5)' },
+            { emoji: 'balloon', icon: '🎈', title: 'Balloon (6)' },
+            { emoji: 'sparkles', icon: '✨', title: 'Sparkles (7)' },
+            { emoji: 'birthday_cake', icon: '🎂', title: 'Birthday Cake (8)' },
+            { emoji: 'dancing_woman', icon: '💃', title: 'Dancing (9)' },
+            { emoji: 'dancing_man', icon: '🕺', title: 'Dancing (0)' }
+        ];
+        
+        const emojis = this.mode === 'holiday' ? holidayEmojis : defaultEmojis;
+        
+        // Create emoji buttons
+        emojis.forEach((emojiData, index) => {
+            const button = document.createElement('button');
+            button.className = 'emoji-button';
+            button.setAttribute('data-emoji', emojiData.emoji);
+            button.setAttribute('title', emojiData.title);
+            button.textContent = emojiData.icon;
+            emojiContainer.appendChild(button);
+        });
+        
+        // Update emojiButtons reference
+        this.emojiButtons = Array.from(emojiContainer.querySelectorAll('.emoji-button'));
     }
 
     initAudio() {
@@ -82,13 +154,17 @@ class EmojiSystem {
     }
 
     setupEventListeners() {
-        // Button clicks
-        this.emojiButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const emoji = button.getAttribute('data-emoji');
-                this.sendEmoji(emoji);
+        // Use event delegation for button clicks (works even if buttons are recreated)
+        const emojiContainer = document.querySelector('.emoji-ui');
+        if (emojiContainer) {
+            emojiContainer.addEventListener('click', (e) => {
+                const button = e.target.closest('.emoji-button');
+                if (button) {
+                    const emoji = button.getAttribute('data-emoji');
+                    this.sendEmoji(emoji);
+                }
             });
-        });
+        }
 
         // Keyboard shortcuts (1-9, 0)
         document.addEventListener('keydown', (e) => {
@@ -99,8 +175,10 @@ class EmojiSystem {
                 } else {
                     index = parseInt(e.key) - 1; // 1-9 map to indices 0-8
                 }
-                if (this.emojiButtons[index]) {
-                    const emoji = this.emojiButtons[index].getAttribute('data-emoji');
+                // Get fresh button list in case it changed
+                const buttons = document.querySelectorAll('.emoji-button');
+                if (buttons[index]) {
+                    const emoji = buttons[index].getAttribute('data-emoji');
                     this.sendEmoji(emoji);
                 }
             }

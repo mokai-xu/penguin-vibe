@@ -287,4 +287,3 @@ class Iceberg {
         renderCtx.restore();
     }
 }
-
