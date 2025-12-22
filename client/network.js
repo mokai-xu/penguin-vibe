@@ -12,16 +12,11 @@ class Network {
     connect(serverUrl = null) {
         // Auto-detect server URL if not provided
         if (!serverUrl) {
-            // Check for config (set via Vercel environment variable)
-            serverUrl = window.CONFIG?.SERVER_URL || null;
-            
-            if (!serverUrl) {
-                // Auto-detect for local development
-                const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
-                const hostname = window.location.hostname;
-                const port = window.location.port || (protocol === 'https:' ? '443' : '80');
-                serverUrl = `${protocol}//${hostname}${port !== '80' && port !== '443' ? ':' + port : ''}`;
-            }
+            // Auto-detect server URL (works for both local and Render deployment)
+            const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
+            const hostname = window.location.hostname;
+            const port = window.location.port || (protocol === 'https:' ? '443' : '80');
+            serverUrl = `${protocol}//${hostname}${port !== '80' && port !== '443' ? ':' + port : ''}`;
         }
         this.socket = io(serverUrl);
         

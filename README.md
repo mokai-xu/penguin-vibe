@@ -102,60 +102,73 @@ If you need to use different sprite dimensions, update the `Penguin.loadSpriteSh
 
 ## Deployment
 
-### Recommended: Hybrid Deployment (Frontend on Vercel, Backend on Railway/Render)
+### Recommended: Render (Single Platform Deployment)
 
-This project uses Socket.io for real-time multiplayer, which requires persistent WebSocket connections. Vercel's serverless functions don't support long-lived connections, so we use a hybrid approach:
+This project uses Socket.io for real-time multiplayer, which requires persistent WebSocket connections. The server already serves static files, so you can deploy everything on Render in a single deployment.
 
-#### Frontend Deployment (Vercel)
+#### Deploy to Render
+
+**Option 1: Using render.yaml (Recommended)**
 
 1. **Push to GitHub**: Ensure your code is pushed to a GitHub repository
 
-2. **Connect to Vercel**:
-   - Go to [vercel.com](https://vercel.com) and sign in
-   - Click "Add New Project" and import your GitHub repository
-   - Vercel will auto-detect the configuration from `vercel.json`
+2. **Connect to Render**:
+   - Go to [render.com](https://render.com) and sign in
+   - Click "New +" → "Blueprint"
+   - Connect your GitHub repository
+   - Render will automatically detect `render.yaml` and configure the service
 
-3. **Set Environment Variable**:
-   - In Vercel project settings, go to "Environment Variables"
-   - Add: `SERVER_URL` = Your backend server URL (e.g., `https://your-app.railway.app`)
-   - This will be injected at build time via `vercel-build.js`
+3. **Deploy**: Click "Apply" and Render will:
+   - Build the server dependencies
+   - Start the server
+   - Serve both the Socket.io server and static files
+   - Provide a public URL
 
-4. **Deploy**: Click "Deploy" and Vercel will build and deploy your frontend
+**Option 2: Manual Configuration**
 
-#### Backend Deployment (Railway/Render)
+1. **Push to GitHub**: Ensure your code is pushed to a GitHub repository
 
-**Railway:**
-1. Create a new project on [railway.app](https://railway.app)
-2. Connect your GitHub repository
-3. Set root directory to `server`
-4. Railway will auto-detect Node.js and install dependencies
-5. The `PORT` environment variable is set automatically
-6. Deploy and copy the generated URL
+2. **Create Web Service**:
+   - Go to [render.com](https://render.com) and sign in
+   - Click "New +" → "Web Service"
+   - Connect your GitHub repository
 
-**Render:**
-1. Create a new Web Service on [render.com](https://render.com)
-2. Connect your GitHub repository
-3. Configure:
-   - Root Directory: `server`
-   - Build Command: `npm install`
-   - Start Command: `npm start`
-4. Deploy and copy the generated URL
+3. **Configure**:
+   - **Name**: `penguin-vibe` (or your preferred name)
+   - **Environment**: `Node`
+   - **Root Directory**: `server`
+   - **Build Command**: `npm install`
+   - **Start Command**: `npm start`
+   - **Plan**: Free (or your preferred plan)
 
-**Important**: After deploying the backend, update the `SERVER_URL` environment variable in Vercel with your backend URL.
+4. **Environment Variables** (optional):
+   - `NODE_ENV`: `production`
+   - `PORT`: Render sets this automatically, but you can set it to `3000` if needed
 
-### Alternative: Full Server Deployment
+5. **Deploy**: Click "Create Web Service" and Render will deploy your app
 
-The server can also be deployed to platforms like:
-- Railway (recommended)
-- Render
-- Fly.io
-- Heroku
-- Any Node.js hosting service with WebSocket support
+#### How It Works
+
+- The server (`server/server.js`) serves:
+  - Static files from `client/` directory
+  - Assets from `assets/` directory
+  - Socket.io WebSocket server for multiplayer
+- The client automatically connects to the same domain (auto-detection in `network.js`)
+- Everything runs on a single Render service
+
+#### Alternative Platforms
+
+The server can also be deployed to:
+- **Railway**: Set root directory to `server`, auto-detects Node.js
+- **Fly.io**: Requires Dockerfile (see Fly.io docs)
+- **Heroku**: Traditional platform, requires Procfile
+- **DigitalOcean App Platform**: Similar to Render
+- **Self-hosted VPS**: Full control, requires server management
 
 Make sure to:
 1. Set the `PORT` environment variable (usually auto-set by the platform)
 2. Ensure WebSocket support is enabled
-3. Update `SERVER_URL` in Vercel to point to your deployed backend
+3. The server serves static files, so no separate frontend deployment needed
 
 ## Technologies Used
 

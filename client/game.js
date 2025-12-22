@@ -50,7 +50,7 @@ class Game {
 
     async loadEncouragements() {
         try {
-            const response = await fetch('assets/secrets.txt');
+            const response = await fetch('/assets/secrets.txt');
             const text = await response.text();
             this.parseEncouragements(text);
         } catch (error) {
@@ -239,10 +239,10 @@ class Game {
         this.customizationData = customization;
         
         // Load sprite sheet if not already loaded
-        // Default path: assets/penguin-sprites.png
+        // Default path: /assets/penguin-sprites.png
         // Sprite dimensions: 64x64 pixels, 3 frames per row
         if (!Penguin.isSpriteSheetLoaded()) {
-            Penguin.loadSpriteSheet('assets/penguin-sprites.png', 64, 64, 3);
+            Penguin.loadSpriteSheet('/assets/penguin-sprites.png', 64, 64, 3);
         }
         
         // Initialize iceberg
@@ -585,7 +585,7 @@ class Game {
 window.addEventListener('DOMContentLoaded', () => {
     // Pre-load sprite sheet
     // You can change the path here if your sprite sheet is in a different location
-    res = Penguin.loadSpriteSheet('assets/penguin-sprites.png', 64, 64, 3);
+    res = Penguin.loadSpriteSheet('/assets/penguin-sprites.png', 64, 64, 3);
     console.log(res);
     
     new Game();
