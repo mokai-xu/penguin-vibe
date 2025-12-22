@@ -1,0 +1,12 @@
+{
+  "name": "penguin-vibe",
+  "version": "1.0.0",
+  "description": "Multiplayer penguin waddling game",
+  "scripts": {
+    "build": "node vercel-build.js"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
+

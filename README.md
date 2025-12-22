@@ -102,22 +102,60 @@ If you need to use different sprite dimensions, update the `Penguin.loadSpriteSh
 
 ## Deployment
 
-### Server Deployment
+### Recommended: Hybrid Deployment (Frontend on Vercel, Backend on Railway/Render)
 
-The server can be deployed to platforms like:
-- Heroku
-- Railway
+This project uses Socket.io for real-time multiplayer, which requires persistent WebSocket connections. Vercel's serverless functions don't support long-lived connections, so we use a hybrid approach:
+
+#### Frontend Deployment (Vercel)
+
+1. **Push to GitHub**: Ensure your code is pushed to a GitHub repository
+
+2. **Connect to Vercel**:
+   - Go to [vercel.com](https://vercel.com) and sign in
+   - Click "Add New Project" and import your GitHub repository
+   - Vercel will auto-detect the configuration from `vercel.json`
+
+3. **Set Environment Variable**:
+   - In Vercel project settings, go to "Environment Variables"
+   - Add: `SERVER_URL` = Your backend server URL (e.g., `https://your-app.railway.app`)
+   - This will be injected at build time via `vercel-build.js`
+
+4. **Deploy**: Click "Deploy" and Vercel will build and deploy your frontend
+
+#### Backend Deployment (Railway/Render)
+
+**Railway:**
+1. Create a new project on [railway.app](https://railway.app)
+2. Connect your GitHub repository
+3. Set root directory to `server`
+4. Railway will auto-detect Node.js and install dependencies
+5. The `PORT` environment variable is set automatically
+6. Deploy and copy the generated URL
+
+**Render:**
+1. Create a new Web Service on [render.com](https://render.com)
+2. Connect your GitHub repository
+3. Configure:
+   - Root Directory: `server`
+   - Build Command: `npm install`
+   - Start Command: `npm start`
+4. Deploy and copy the generated URL
+
+**Important**: After deploying the backend, update the `SERVER_URL` environment variable in Vercel with your backend URL.
+
+### Alternative: Full Server Deployment
+
+The server can also be deployed to platforms like:
+- Railway (recommended)
 - Render
-- Any Node.js hosting service
+- Fly.io
+- Heroku
+- Any Node.js hosting service with WebSocket support
 
 Make sure to:
-1. Set the `PORT` environment variable
-2. Update the client's server URL in `network.js` if needed
-3. Ensure WebSocket support is enabled
-
-### Client Deployment
-
-The client can be served as static files. Update the server URL in `client/network.js` to point to your deployed server.
+1. Set the `PORT` environment variable (usually auto-set by the platform)
+2. Ensure WebSocket support is enabled
+3. Update `SERVER_URL` in Vercel to point to your deployed backend
 
 ## Technologies Used
 
