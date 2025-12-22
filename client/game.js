@@ -163,8 +163,21 @@ class Game {
         // Sprite dimensions: 64x64 pixels, 3 frames per row
         if (!Penguin.isSpriteSheetLoaded()) {
             Penguin.loadSpriteSheet('/assets/penguin-sprites.png', 64, 64, 3);
+            
+            // Wait for sprite sheet to load before starting game
+            const checkSpriteLoaded = setInterval(() => {
+                if (Penguin.isSpriteSheetLoaded()) {
+                    clearInterval(checkSpriteLoaded);
+                    this.initializeGame(customization);
+                }
+            }, 50);
+            return;
         }
         
+        this.initializeGame(customization);
+    }
+
+    initializeGame(customization) {
         // Initialize iceberg
         this.iceberg = new Iceberg(this.canvas);
         

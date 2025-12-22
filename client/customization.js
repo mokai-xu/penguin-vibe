@@ -37,7 +37,7 @@ class Customization {
         ctx.clearRect(0, 0, this.previewCanvas.width, this.previewCanvas.height);
         
         // Wait for sprite sheet to load if not already loaded
-        if (!Penguin.isSpriteSheetLoaded()) {
+        if (!Penguin.spriteSheet || !Penguin.spriteSheet.isLoaded()) {
             // Retry after a short delay
             setTimeout(() => this.renderPreview(), 100);
             return;

@@ -125,7 +125,9 @@ class Penguin {
     }
     
     drawPenguinSprite(ctx) {
-        if (!Penguin.spriteSheet) return;
+        if (!Penguin.spriteSheet || !Penguin.spriteSheet.isLoaded()) {
+            return;
+        }
         
         // Map direction to sprite sheet row
         // 0 = down (front), 1 = up (back), 2 = left, 3 = right
@@ -145,7 +147,6 @@ class Penguin {
         
         // Get sprite frame data
         const spriteFrame = Penguin.spriteSheet.getFrame(row, frame);
-        console.log("spriteFrame", spriteFrame);
         if (!spriteFrame) return;
         
         // Draw sprite with color tinting for customization
