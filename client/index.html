@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penguin Vibe - Waddle Together!</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="customization-screen" class="customization-screen">
+        <div class="customization-modal">
+            <h1 class="main-title">Meet your penguin pal ☺️</h1>
+            <p class="subtitle">This is a safe place to express yourself.</p>
+            
+            <div class="customization-section">
+                <h2>Pick a Hat</h2>
+                <div class="hat-grid" id="hat-grid">
+                    <div class="hat-option" data-hat="none">
+                        <div class="hat-preview">None</div>
+                    </div>
+                    <div class="hat-option" data-hat="party">
+                        <div class="hat-preview">🎉</div>
+                        <span>Party Hat</span>
+                    </div>
+                    <div class="hat-option" data-hat="egg">
+                        <div class="hat-preview">🥚</div>
+                        <span>Egg</span>
+                    </div>
+                    <div class="hat-option" data-hat="fedora">
+                        <div class="hat-preview">🎩</div>
+                        <span>Fedora</span>
+                    </div>
+                    <div class="hat-option" data-hat="magician">
+                        <div class="hat-preview">🎩</div>
+                        <span>Magician</span>
+                    </div>
+                    <div class="hat-option" data-hat="bow">
+                        <div class="hat-preview">🎀</div>
+                        <span>Red Bow</span>
+                    </div>
+                    <div class="hat-option" data-hat="cowboy">
+                        <div class="hat-preview">🤠</div>
+                        <span>Cowboy</span>
+                    </div>
+                    <div class="hat-option" data-hat="watermelon">
+                        <div class="hat-preview">🍉</div>
+                        <span>Watermelon</span>
+                    </div>
+                    <div class="hat-option" data-hat="baseball">
+                        <div class="hat-preview">⚾</div>
+                        <span>Cap</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="customization-section">
+                <h2>Preview</h2>
+                <canvas id="preview-canvas" width="200" height="230"></canvas>
+            </div>
+
+            <button id="join-button" class="join-button">Join the Iceberg!</button>
+        </div>
+    </div>
+
+    <div id="game-container" class="game-container" style="display: none;">
+        <canvas id="game-canvas"></canvas>
+        
+        <div class="emoji-ui">
+            <button class="emoji-button" data-emoji="happy" title="Happy (1)">😊</button>
+            <button class="emoji-button" data-emoji="sad" title="Sad (2)">😢</button>
+            <button class="emoji-button" data-emoji="relieved" title="Relieved (3)">😌</button>
+            <button class="emoji-button" data-emoji="silly" title="Silly (4)">😜</button>
+            <button class="emoji-button" data-emoji="surprised" title="Surprised (5)">😲</button>
+            <button class="emoji-button" data-emoji="laughing" title="Laughing (6)">😂</button>
+            <button class="emoji-button" data-emoji="cool" title="Cool (7)">😎</button>
+            <button class="emoji-button" data-emoji="cowboy_face" title="Cowboy (8)">🤠</button>
+            <button class="emoji-button" data-emoji="angry" title="Angry (9)">😠</button>
+            <button class="emoji-button" data-emoji="clown" title="Clown (0)">🤡</button>
+            <button class="emoji-button" data-emoji="tired" title="Tired">😩</button>
+            <button class="emoji-button" data-emoji="dizzy" title="Dizzy">😵‍💫</button>
+            <button class="emoji-button" data-emoji="thinking" title="Thinking">🤔</button>
+            <button class="emoji-button" data-emoji="hot" title="Hot">🥵</button>
+            <button class="emoji-button" data-emoji="smirk" title="Smirk">😏</button>
+        </div>
+
+        <div class="instructions">
+            <p>Use arrow keys to waddle around! Click emojis to express yourself. Once you're done, click "End session"</p>
+        </div>
+
+        <button id="end-session-button" class="end-session-button">End session</button>
+    </div>
+
+    <div id="session-results" class="session-results" style="display: none;">
+        <div class="results-modal">
+            <h2>Your Session Summary</h2>
+            <div class="penguin-preview-container">
+                <canvas id="results-penguin-canvas" width="200" height="230"></canvas>
+            </div>
+            <div id="mood-summary" class="mood-summary"></div>
+            <div id="encouragement" class="encouragement"></div>
+            <button id="close-results-button" class="close-results-button">Close</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+    <script src="spriteSheet.js"></script>
+    <script src="iceberg.js"></script>
+    <script src="penguin.js"></script>
+    <script src="emoji.js"></script>
+    <script src="customization.js"></script>
+    <script src="network.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
+
