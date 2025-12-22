@@ -13,6 +13,10 @@ class Game {
         this.emojiSystem = null;
         this.customizationData = null; // Store customization for results screen
         
+        // Background music
+        this.backgroundMusic = null;
+        this.musicEnabled = true; // Default to ON
+        
         // Input
         this.keys = {};
         this.setupInput();
@@ -194,6 +198,9 @@ class Game {
         // Initialize emoji system
         this.emojiSystem = new EmojiSystem();
         
+        // Setup background music
+        this.setupBackgroundMusic();
+        
         // Setup end session button
         this.setupEndSessionButton();
         
@@ -202,10 +209,78 @@ class Game {
         this.gameLoop(0);
     }
 
+    setupBackgroundMusic() {
+        // Create audio element for background music
+        this.backgroundMusic = new Audio('/assets/lofi v4 sadder.mp3');
+        this.backgroundMusic.loop = true;
+        this.backgroundMusic.volume = 0.5; // Set volume to 50%
+        
+        // Handle audio loading errors
+        this.backgroundMusic.addEventListener('error', (e) => {
+            console.warn('Failed to load background music:', e);
+        });
+        
+        // Setup music toggle button
+        const musicToggle = document.getElementById('music-toggle');
+        if (musicToggle) {
+            musicToggle.addEventListener('click', () => {
+                this.toggleMusic();
+            });
+        }
+        
+        // If music is enabled by default, try to start playing now
+        if (this.musicEnabled) {
+            this.backgroundMusic.play().catch(error => {
+                console.warn('Could not auto-play background music:', error);
+            });
+        }
+        
+        // Update button appearance (reflect current state)
+        this.updateMusicToggleAppearance();
+    }
+
+    toggleMusic() {
+        this.musicEnabled = !this.musicEnabled;
+        
+        if (this.musicEnabled) {
+            // Play music
+            this.backgroundMusic.play().catch(error => {
+                console.warn('Could not play background music:', error);
+                // If autoplay is blocked, user will need to interact first
+            });
+        } else {
+            // Pause music
+            this.backgroundMusic.pause();
+        }
+        
+        this.updateMusicToggleAppearance();
+    }
+
+    updateMusicToggleAppearance() {
+        const musicToggle = document.getElementById('music-toggle');
+        if (!musicToggle) return;
+        
+        if (this.musicEnabled) {
+            musicToggle.textContent = '🎵';
+            musicToggle.title = 'BGM';
+            musicToggle.classList.remove('music-off');
+            musicToggle.classList.add('music-on');
+        } else {
+            musicToggle.textContent = '🎵';
+            musicToggle.title = 'BGM';
+            musicToggle.classList.remove('music-on');
+            musicToggle.classList.add('music-off');
+        }
+    }
+
     setupEndSessionButton() {
         const endSessionButton = document.getElementById('end-session-button');
         if (endSessionButton) {
             endSessionButton.addEventListener('click', () => {
+                // Pause background music when ending session
+                if (this.backgroundMusic) {
+                    this.backgroundMusic.pause();
+                }
                 this.endSession();
             });
         }

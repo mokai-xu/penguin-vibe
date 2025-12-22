@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Multiplayer penguin waddling game",
   "dependencies": {},
+  "scripts": {
+    "start": "cd server && node server.js"
+  },
   "engines": {
     "node": ">=14.0.0"
   }

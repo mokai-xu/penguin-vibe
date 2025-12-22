@@ -284,6 +284,7 @@ body {
     color: #2C3E50;
     font-size: 0.9em;
     margin: 0;
+    text-align: center;
 }
 
 /* End Session Button */
@@ -322,6 +323,123 @@ body {
     box-shadow: 
         0 0 0 2px #87CEEB,
         2px 2px 0px #000000;
+}
+
+/* Sound Toggle Button */
+.sound-toggle {
+    position: fixed;
+    top: 20px;
+    right: 80px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 3px solid #000000;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 1.5em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    box-shadow: 
+        0 0 0 2px #87CEEB,
+        3px 3px 0px #000000;
+    image-rendering: pixelated;
+}
+
+.sound-toggle:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 
+        0 0 0 2px #87CEEB,
+        5px 5px 0px #000000;
+    background: rgba(255, 255, 255, 1);
+}
+
+.sound-toggle:active {
+    transform: translate(1px, 1px);
+    box-shadow: 
+        0 0 0 2px #87CEEB,
+        2px 2px 0px #000000;
+}
+
+.sound-toggle.sound-on {
+    background: rgba(144, 238, 144, 0.9);
+}
+
+.sound-toggle.sound-off {
+    background: rgba(255, 200, 200, 0.9);
+}
+
+/* Music Toggle Button */
+.music-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 3px solid #000000;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 1.5em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    box-shadow: 
+        0 0 0 2px #87CEEB,
+        3px 3px 0px #000000;
+    image-rendering: pixelated;
+}
+
+.music-toggle:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 
+        0 0 0 2px #87CEEB,
+        5px 5px 0px #000000;
+    background: rgba(255, 255, 255, 1);
+}
+
+.music-toggle:active {
+    transform: translate(1px, 1px);
+    box-shadow: 
+        0 0 0 2px #87CEEB,
+        2px 2px 0px #000000;
+}
+
+.music-toggle.music-on {
+    background: rgba(144, 238, 144, 0.9);
+}
+
+.music-toggle.music-off {
+    background: rgba(255, 200, 200, 0.9);
+}
+
+/* Music Credit */
+.music-credit {
+    position: fixed;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.85em;
+    color: rgba(255, 255, 255, 0.5);
+    opacity: 0.5;
+    z-index: 100;
+    text-align: center;
+    pointer-events: auto;
+}
+
+.music-credit a {
+    color: rgba(255, 255, 255, 0.5);
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+}
+
+.music-credit a:hover {
+    opacity: 0.8;
+    text-decoration: underline;
 }
 
 /* Session Results Modal */
