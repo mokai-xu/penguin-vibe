@@ -10,8 +10,6 @@ class Game {
         // Game state
         this.iceberg = null;
         this.localPenguin = null;
-        this.otherPenguins = new Map(); // id -> Penguin
-        this.network = new Network();
         this.emojiSystem = null;
         this.customizationData = null; // Store customization for results screen
         
@@ -22,10 +20,6 @@ class Game {
         // Game loop
         this.lastTime = 0;
         this.running = false;
-        
-        // Position sync throttling
-        this.lastPositionUpdate = 0;
-        this.positionUpdateInterval = 100; // ms
         
         // Resize debouncing
         this.resizeTimeout = null;
@@ -38,9 +32,6 @@ class Game {
             positive: []
         };
         this.loadEncouragements();
-        
-        // Setup network callbacks
-        this.setupNetworkCallbacks();
         
         // Wait for customization
         window.addEventListener('customizationComplete', (e) => {
@@ -162,77 +153,6 @@ class Game {
         });
     }
 
-    setupNetworkCallbacks() {
-        this.network.onGameState = (data) => {
-            // Add all existing players
-            data.players.forEach(player => {
-                if (player.id !== this.network.getSocketId()) {
-                    const penguin = new Penguin(
-                        player.x,
-                        player.y,
-                        player.color,
-                        player.hat,
-                        player.id,
-                        false
-                    );
-                    penguin.direction = player.direction || 'idle';
-                    if (player.emoji) {
-                        penguin.setEmoji(player.emoji);
-                    }
-                    this.otherPenguins.set(player.id, penguin);
-                } else if (this.localPenguin) {
-                    // Update local penguin position from server
-                    this.localPenguin.x = player.x;
-                    this.localPenguin.y = player.y;
-                    this.localPenguin.direction = player.direction || 'idle';
-                    if (player.emoji) {
-                        this.localPenguin.setEmoji(player.emoji);
-                    }
-                }
-            });
-        };
-
-        this.network.onPlayerJoined = (data) => {
-            const penguin = new Penguin(
-                data.x,
-                data.y,
-                Penguin.defaultColor,
-                data.hat,
-                data.id,
-                false
-            );
-            penguin.direction = data.direction || 'idle';
-            this.otherPenguins.set(data.id, penguin);
-        };
-
-        this.network.onPlayerLeft = (data) => {
-            this.otherPenguins.delete(data.id);
-        };
-
-        this.network.onPlayerMoved = (data) => {
-            const penguin = this.otherPenguins.get(data.id);
-            if (penguin) {
-                penguin.x = data.x;
-                penguin.y = data.y;
-                penguin.direction = data.direction || 'idle';
-            }
-        };
-
-        this.network.onPlayerEmoji = (data) => {
-            if (data.id === this.network.getSocketId()) {
-                // Local player emoji
-                if (this.localPenguin) {
-                    this.localPenguin.setEmoji(data.emoji);
-                }
-            } else {
-                // Other player emoji
-                const penguin = this.otherPenguins.get(data.id);
-                if (penguin) {
-                    penguin.setEmoji(data.emoji);
-                }
-            }
-        };
-    }
 
     startGame(customization) {
         // Store customization data for results screen
@@ -258,26 +178,8 @@ class Game {
             true
         );
         
-        // Connect to server
-        this.network.connect();
-        
-        // Wait for connection, then join
-        const checkConnection = setInterval(() => {
-            if (this.network.isConnected()) {
-                clearInterval(checkConnection);
-                this.network.joinGame(Penguin.defaultColor, customization.hat);
-                
-                // Update local penguin ID when we get socket ID
-                setTimeout(() => {
-                    if (this.localPenguin && this.network.getSocketId()) {
-                        this.localPenguin.id = this.network.getSocketId();
-                    }
-                }, 100);
-            }
-        }, 50);
-        
         // Initialize emoji system
-        this.emojiSystem = new EmojiSystem(this.network);
+        this.emojiSystem = new EmojiSystem();
         
         // Setup end session button
         this.setupEndSessionButton();
@@ -513,23 +415,7 @@ class Game {
             
             // Update penguin
             this.localPenguin.update(deltaTime, this.iceberg);
-            
-            // Send position update (throttled)
-            const now = Date.now();
-            if (now - this.lastPositionUpdate > this.positionUpdateInterval) {
-                this.network.sendMove(
-                    this.localPenguin.x,
-                    this.localPenguin.y,
-                    this.localPenguin.direction
-                );
-                this.lastPositionUpdate = now;
-            }
         }
-        
-        // Update other penguins
-        this.otherPenguins.forEach(penguin => {
-            penguin.update(deltaTime, this.iceberg);
-        });
     }
 
     render() {
@@ -545,12 +431,7 @@ class Game {
             this.iceberg.render();
         }
         
-        // Draw other penguins first
-        this.otherPenguins.forEach(penguin => {
-            penguin.render(this.ctx);
-        });
-        
-        // Draw local penguin on top
+        // Draw local penguin
         if (this.localPenguin) {
             this.localPenguin.render(this.ctx);
         }
@@ -588,7 +469,7 @@ window.addEventListener('DOMContentLoaded', () => {
     res = Penguin.loadSpriteSheet('/assets/penguin-sprites.png', 64, 64, 3);
     console.log(res);
     
-    new Game();
+    window.game = new Game();
     new Customization();
 });
 

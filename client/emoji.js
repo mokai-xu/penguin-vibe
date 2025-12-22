@@ -1,6 +1,5 @@
 class EmojiSystem {
-    constructor(network) {
-        this.network = network;
+    constructor() {
         this.emojiButtons = document.querySelectorAll('.emoji-button');
         this.emojiCounts = {}; // Track emoji usage: { emojiType: count }
         this.setupEventListeners();
@@ -39,8 +38,9 @@ class EmojiSystem {
         }
         this.emojiCounts[emoji]++;
         
-        if (this.network && this.network.isConnected()) {
-            this.network.sendEmoji(emoji);
+        // Set emoji on local penguin
+        if (window.game && window.game.localPenguin) {
+            window.game.localPenguin.setEmoji(emoji);
         }
     }
 
