@@ -62,12 +62,8 @@ class Penguin {
             this.animationFrame = 0; // Idle always uses frame 0
         }
         
-        // Constrain to iceberg
-        if (iceberg) {
-            const constrained = iceberg.constrainPoint(this.x, this.y, this.width / 2);
-            this.x = constrained.x;
-            this.y = constrained.y;
-        }
+        // Penguin position is now in world space, no need to constrain to iceberg
+        // World boundaries handle constraints
         
         // Update all emoji positions (move upward)
         const now = Date.now();

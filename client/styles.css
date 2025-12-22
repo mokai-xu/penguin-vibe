@@ -91,9 +91,10 @@ body {
 
 .hat-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
     gap: 15px;
     margin-top: 20px;
+    width: 100%;
 }
 
 .hat-option {
@@ -111,6 +112,8 @@ body {
         0 0 0 1px #87CEEB,
         2px 2px 0px #000000;
     image-rendering: pixelated;
+    min-width: 0; /* Allow flex shrinking */
+    box-sizing: border-box;
 }
 
 .hat-option:hover {
@@ -235,7 +238,7 @@ body {
     gap: 8px;
     z-index: 100;
     background: rgba(255, 255, 255, 0.9);
-    padding: 12px;
+    padding: 12px 8px;
     border-radius: 25px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
     max-width: 90%;
@@ -275,9 +278,43 @@ body {
     transform: translateX(-50%);
     background: rgba(255, 255, 255, 0.9);
     padding: 10px 20px;
+    padding-right: 40px; /* Extra padding for close button */
     border-radius: 20px;
     z-index: 100;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.instructions.hidden {
+    display: none;
+}
+
+.instructions-close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: transparent;
+    border: none;
+    font-size: 1.5em;
+    color: #2C3E50;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    padding: 0;
+    line-height: 1;
+}
+
+.instructions-close:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: #000;
+}
+
+.instructions-close:active {
+    transform: scale(0.9);
 }
 
 .instructions p {
@@ -290,20 +327,20 @@ body {
 /* End Session Button */
 .end-session-button {
     position: fixed;
-    bottom: 30px;
-    right: 30px;
+    top: 20px;
+    right: 20px;
     background: #FF6B6B;
     color: #000000;
-    border: 4px solid #000000;
-    padding: 12px 30px;
-    font-size: 1.1em;
+    border: 3px solid #000000;
+    padding: 8px 16px;
+    font-size: 0.9em;
     border-radius: 0;
     cursor: pointer;
     transition: all 0.1s ease;
     font-weight: bold;
     box-shadow: 
         0 0 0 2px #87CEEB,
-        4px 4px 0px #000000;
+        3px 3px 0px #000000;
     text-transform: uppercase;
     letter-spacing: 1px;
     z-index: 100;
@@ -329,7 +366,7 @@ body {
 .sound-toggle {
     position: fixed;
     top: 20px;
-    right: 80px;
+    left: 20px;
     background: rgba(255, 255, 255, 0.9);
     border: 3px solid #000000;
     border-radius: 50%;
@@ -374,8 +411,8 @@ body {
 /* Music Toggle Button */
 .music-toggle {
     position: fixed;
-    top: 20px;
-    right: 20px;
+    top: 80px;
+    left: 20px;
     background: rgba(255, 255, 255, 0.9);
     border: 3px solid #000000;
     border-radius: 50%;
@@ -415,6 +452,197 @@ body {
 
 .music-toggle.music-off {
     background: rgba(255, 200, 200, 0.9);
+}
+
+/* Instructions Button */
+.instructions-button {
+    position: fixed;
+    top: 140px;
+    left: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 3px solid #000000;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 1.5em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    box-shadow: 
+        0 0 0 2px #87CEEB,
+        3px 3px 0px #000000;
+    image-rendering: pixelated;
+}
+
+.instructions-button:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 
+        0 0 0 2px #87CEEB,
+        5px 5px 0px #000000;
+    background: rgba(255, 255, 255, 1);
+}
+
+.instructions-button:active {
+    transform: translate(1px, 1px);
+    box-shadow: 
+        0 0 0 2px #87CEEB,
+        2px 2px 0px #000000;
+}
+
+/* Instructions Modal */
+.instructions-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 182, 193, 0.95);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    overflow-y: auto;
+}
+
+.instructions-modal-content {
+    background: white;
+    border: 4px solid #000000;
+    border-radius: 0;
+    padding: 40px;
+    max-width: 800px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 
+        0 0 0 2px #87CEEB,
+        4px 4px 0px #000000;
+    position: relative;
+    margin: 20px;
+}
+
+.instructions-modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    font-size: 2em;
+    color: #2C3E50;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    padding: 0;
+    line-height: 1;
+    z-index: 10;
+}
+
+.instructions-modal-close:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: #000;
+}
+
+.instructions-modal-close:active {
+    transform: scale(0.9);
+}
+
+.instructions-modal-content h2 {
+    color: #000000;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    text-shadow: 2px 2px 0px #87CEEB;
+    text-align: center;
+}
+
+.instructions-section,
+.game-inspiration-section {
+    background: white;
+    border: 3px solid #000000;
+    border-radius: 0;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 
+        0 0 0 2px #87CEEB,
+        3px 3px 0px #000000;
+}
+
+.instructions-section h3,
+.game-inspiration-section h3 {
+    color: #000000;
+    margin-bottom: 15px;
+    font-size: 1.6em;
+    text-shadow: 1px 1px 0px #87CEEB;
+}
+
+.instructions-section ul,
+.game-inspiration-section ul {
+    color: #000000;
+    font-size: 1.1em;
+    line-height: 1.8;
+    margin-left: 20px;
+    margin-top: 15px;
+}
+
+.instructions-section li {
+    margin-bottom: 4px;
+}
+
+.game-inspiration-section li {
+    margin-bottom: 10px;
+}
+
+.instructions-section strong,
+.game-inspiration-section strong {
+    color: #4682B4;
+}
+
+.game-inspiration-section p {
+    color: #000000;
+    font-size: 1.1em;
+    line-height: 1.8;
+    margin-bottom: 15px;
+}
+
+.close-instructions-modal-button {
+    background: #FFD700;
+    color: #000000;
+    border: 4px solid #000000;
+    padding: 12px 30px;
+    font-size: 1.1em;
+    border-radius: 0;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    font-weight: bold;
+    box-shadow: 
+        0 0 0 2px #87CEEB,
+        4px 4px 0px #000000;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    image-rendering: pixelated;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.close-instructions-modal-button:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 
+        0 0 0 2px #87CEEB,
+        6px 6px 0px #000000;
+    background: #FFED4E;
+}
+
+.close-instructions-modal-button:active {
+    transform: translate(1px, 1px);
+    box-shadow: 
+        0 0 0 2px #87CEEB,
+        2px 2px 0px #000000;
 }
 
 /* Music Credit */
@@ -577,6 +805,58 @@ body {
         2px 2px 0px #000000;
 }
 
+/* Mobile Controller */
+.mobile-controller {
+    position: fixed;
+    bottom: 100px;
+    left: 30px;
+    z-index: 100;
+    display: none;
+    pointer-events: none;
+}
+
+.mobile-controller.active {
+    display: block;
+    pointer-events: auto;
+}
+
+.controller-base {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.7);
+    border: 3px solid #000000;
+    position: relative;
+    box-shadow: 
+        0 0 0 2px #87CEEB,
+        3px 3px 0px #000000;
+    image-rendering: pixelated;
+}
+
+.controller-stick {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    border: 3px solid #000000;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease-out;
+    box-shadow: 
+        0 0 0 2px #87CEEB,
+        2px 2px 0px #000000;
+    image-rendering: pixelated;
+}
+
+.controller-stick.dragging {
+    background: rgba(255, 215, 0, 0.9);
+    box-shadow: 
+        0 0 0 2px #87CEEB,
+        3px 3px 0px #000000;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .customization-modal {
@@ -588,18 +868,353 @@ body {
     }
     
     .hat-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+        gap: 10px;
+    }
+    
+    .hat-option {
+        padding: 8px;
+    }
+    
+    .hat-preview {
+        font-size: 1.5em;
+        min-height: 30px;
+    }
+    
+    .hat-option span {
+        font-size: 0.75em;
     }
     
     .emoji-ui {
         bottom: 20px;
-        padding: 10px;
+        right: 20px;
+        left: auto;
+        transform: none;
+        padding: 10px 6px;
+        max-width: calc(100% - 140px); /* Leave space for controller on left */
     }
     
     .emoji-button {
         width: 40px;
         height: 40px;
         font-size: 1.2em;
+    }
+    
+    .mobile-controller {
+        bottom: 80px;
+        left: 20px;
+    }
+    
+    .controller-base {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .controller-stick {
+        width: 40px;
+        height: 40px;
+    }
+    
+    /* Instructions modal - smaller text for mobile */
+    .instructions-modal-content {
+        padding: 20px;
+        max-height: 95vh;
+    }
+    
+    .instructions-modal-content h2 {
+        font-size: 1.8em;
+        margin-bottom: 20px;
+    }
+    
+    .instructions-section,
+    .game-inspiration-section {
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+    
+    .instructions-section h3,
+    .game-inspiration-section h3 {
+        font-size: 1.2em;
+        margin-bottom: 10px;
+    }
+    
+    .instructions-section ul,
+    .game-inspiration-section ul {
+        font-size: 0.9em;
+        line-height: 1.5;
+        margin-left: 15px;
+        margin-top: 10px;
+    }
+    
+    .game-inspiration-section p {
+        font-size: 0.9em;
+        line-height: 1.5;
+        margin-bottom: 10px;
+    }
+    
+    /* Session results modal - smaller text for mobile */
+    .results-modal {
+        padding: 25px;
+        max-height: 90vh;
+    }
+    
+    .results-modal h2 {
+        font-size: 1.7em;
+        margin-bottom: 18px;
+    }
+    
+    .penguin-preview-container {
+        margin: 18px auto;
+    }
+    
+    #results-penguin-canvas {
+        width: 170px;
+        height: 195px;
+    }
+    
+    .mood-summary,
+    .encouragement {
+        padding: 18px;
+        margin-bottom: 18px;
+    }
+    
+    .mood-summary h3,
+    .encouragement h3 {
+        font-size: 1.3em;
+        margin-bottom: 12px;
+    }
+    
+    .mood-summary p {
+        font-size: 0.95em;
+        line-height: 1.5;
+    }
+    
+    .encouragement p {
+        font-size: 1em;
+        line-height: 1.5;
+    }
+    
+    .close-results-button {
+        padding: 11px 28px;
+        font-size: 1.05em;
+    }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+    .hat-grid {
+        grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+        gap: 8px;
+    }
+    
+    .hat-option {
+        padding: 6px;
+    }
+    
+    .hat-preview {
+        font-size: 1.3em;
+        min-height: 25px;
+    }
+    
+    .hat-option span {
+        font-size: 0.7em;
+    }
+    
+    /* Instructions modal - even smaller text for very small screens */
+    .instructions-modal-content {
+        padding: 15px;
+    }
+    
+    .instructions-modal-content h2 {
+        font-size: 1.5em;
+        margin-bottom: 15px;
+    }
+    
+    .instructions-section,
+    .game-inspiration-section {
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+    
+    .instructions-section h3,
+    .game-inspiration-section h3 {
+        font-size: 1.1em;
+        margin-bottom: 8px;
+    }
+    
+    .instructions-section ul,
+    .game-inspiration-section ul {
+        font-size: 0.85em;
+        line-height: 1.4;
+        margin-left: 12px;
+        margin-top: 8px;
+    }
+    
+    .game-inspiration-section p {
+        font-size: 0.85em;
+        line-height: 1.4;
+        margin-bottom: 8px;
+    }
+    
+    .close-instructions-modal-button {
+        padding: 10px 20px;
+        font-size: 1em;
+    }
+    
+    /* Session results modal - smaller text for mobile */
+    .results-modal {
+        padding: 25px;
+        max-height: 90vh;
+    }
+    
+    .results-modal h2 {
+        font-size: 1.7em;
+        margin-bottom: 18px;
+    }
+    
+    .penguin-preview-container {
+        margin: 18px auto;
+    }
+    
+    #results-penguin-canvas {
+        width: 170px;
+        height: 195px;
+    }
+    
+    .mood-summary,
+    .encouragement {
+        padding: 18px;
+        margin-bottom: 18px;
+    }
+    
+    .mood-summary h3,
+    .encouragement h3 {
+        font-size: 1.3em;
+        margin-bottom: 12px;
+    }
+    
+    .mood-summary p {
+        font-size: 0.95em;
+        line-height: 1.5;
+    }
+    
+    .encouragement p {
+        font-size: 1em;
+        line-height: 1.5;
+    }
+    
+    .close-results-button {
+        padding: 11px 28px;
+        font-size: 1.05em;
+    }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+    .hat-grid {
+        grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+        gap: 8px;
+    }
+    
+    .hat-option {
+        padding: 6px;
+    }
+    
+    .hat-preview {
+        font-size: 1.3em;
+        min-height: 25px;
+    }
+    
+    .hat-option span {
+        font-size: 0.7em;
+    }
+    
+    /* Instructions modal - even smaller text for very small screens */
+    .instructions-modal-content {
+        padding: 15px;
+    }
+    
+    .instructions-modal-content h2 {
+        font-size: 1.5em;
+        margin-bottom: 15px;
+    }
+    
+    .instructions-section,
+    .game-inspiration-section {
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+    
+    .instructions-section h3,
+    .game-inspiration-section h3 {
+        font-size: 1.1em;
+        margin-bottom: 8px;
+    }
+    
+    .instructions-section ul,
+    .game-inspiration-section ul {
+        font-size: 0.85em;
+        line-height: 1.4;
+        margin-left: 12px;
+        margin-top: 8px;
+    }
+    
+    .game-inspiration-section p {
+        font-size: 0.85em;
+        line-height: 1.4;
+        margin-bottom: 8px;
+    }
+    
+    .close-instructions-modal-button {
+        padding: 10px 20px;
+        font-size: 1em;
+    }
+    
+    /* Session results modal - even smaller text for very small screens */
+    .results-modal {
+        padding: 15px;
+        max-height: 95vh;
+    }
+    
+    .results-modal h2 {
+        font-size: 1.4em;
+        margin-bottom: 12px;
+    }
+    
+    .penguin-preview-container {
+        margin: 12px auto;
+    }
+    
+    #results-penguin-canvas {
+        width: 150px;
+        height: 172px;
+    }
+    
+    .mood-summary,
+    .encouragement {
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+    
+    .mood-summary h3,
+    .encouragement h3 {
+        font-size: 1.1em;
+        margin-bottom: 8px;
+    }
+    
+    .mood-summary p {
+        font-size: 0.85em;
+        line-height: 1.4;
+    }
+    
+    .encouragement p {
+        font-size: 0.9em;
+        line-height: 1.4;
+    }
+    
+    .close-results-button {
+        padding: 10px 20px;
+        font-size: 0.95em;
     }
 }
 

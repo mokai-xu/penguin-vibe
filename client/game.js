@@ -20,9 +20,31 @@ class Game {
         // UI click sound
         this.uiClickSound = null;
         
+        // Camera system for open world
+        this.camera = {
+            x: 0,
+            y: 0,
+            targetX: 0,
+            targetY: 0,
+            followSpeed: 0.1 // Smooth camera follow (0-1, higher = faster)
+        };
+        
+        // World boundaries (open world size)
+        this.worldBounds = {
+            minX: -2000,
+            minY: -2000,
+            maxX: 2000,
+            maxY: 2000
+        };
+        
         // Input
         this.keys = {};
         this.setupInput();
+        
+        // Mobile controller
+        this.mobileControllerActive = false;
+        this.controllerDirection = { x: 0, y: 0 };
+        this.setupMobileController();
         
         // Game loop
         this.lastTime = 0;
@@ -129,18 +151,8 @@ class Game {
                     this.iceberg.updateDimensions();
                 }
                 
-                // Reposition local penguin if it's outside bounds
-                if (this.localPenguin) {
-                    // Keep penguin within canvas bounds
-                    this.localPenguin.x = Math.max(
-                        this.localPenguin.width / 2,
-                        Math.min(width - this.localPenguin.width / 2, this.localPenguin.x)
-                    );
-                    this.localPenguin.y = Math.max(
-                        this.localPenguin.height / 2,
-                        Math.min(height - this.localPenguin.height / 2, this.localPenguin.y)
-                    );
-                }
+                // Penguin position is now in world space, no need to constrain to canvas
+                // World boundaries handle constraints
             }
         });
     }
@@ -158,6 +170,140 @@ class Game {
         document.addEventListener('keyup', (e) => {
             this.keys[e.key] = false;
         });
+    }
+
+    setupMobileController() {
+        const controller = document.getElementById('mobile-controller');
+        const stick = document.getElementById('controller-stick');
+        
+        if (!controller || !stick) return;
+        
+        // Detect mobile device
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                        (window.matchMedia && window.matchMedia('(hover: none) and (pointer: coarse)').matches);
+        
+        if (isMobile) {
+            controller.classList.add('active');
+            this.mobileControllerActive = true;
+        }
+        
+        const base = controller.querySelector('.controller-base');
+        if (!base) return;
+        
+        const getBaseCenter = () => {
+            const baseRect = base.getBoundingClientRect();
+            return {
+                x: baseRect.left + baseRect.width / 2,
+                y: baseRect.top + baseRect.height / 2,
+                maxDistance: baseRect.width / 2 - 25 // Max distance stick can move (radius - stick radius)
+            };
+        };
+        
+        let isDragging = false;
+        let currentTouchId = null;
+        
+        const updateStickPosition = (clientX, clientY) => {
+            const center = getBaseCenter();
+            const dx = clientX - center.x;
+            const dy = clientY - center.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            let stickX = dx;
+            let stickY = dy;
+            
+            // Constrain stick to base circle
+            if (distance > center.maxDistance) {
+                stickX = (dx / distance) * center.maxDistance;
+                stickY = (dy / distance) * center.maxDistance;
+            }
+            
+            stick.style.transform = `translate(calc(-50% + ${stickX}px), calc(-50% + ${stickY}px))`;
+            
+            // Calculate normalized direction (-1 to 1)
+            const normalizedX = distance > 0 ? stickX / center.maxDistance : 0;
+            const normalizedY = distance > 0 ? stickY / center.maxDistance : 0;
+            
+            this.controllerDirection = { x: normalizedX, y: normalizedY };
+        };
+        
+        const resetStick = () => {
+            stick.style.transform = 'translate(-50%, -50%)';
+            stick.classList.remove('dragging');
+            this.controllerDirection = { x: 0, y: 0 };
+            isDragging = false;
+            currentTouchId = null;
+        };
+        
+        // Touch events
+        const handleTouchStart = (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            currentTouchId = touch.identifier;
+            isDragging = true;
+            stick.classList.add('dragging');
+            
+            updateStickPosition(touch.clientX, touch.clientY);
+        };
+        
+        const handleTouchMove = (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            
+            const touch = Array.from(e.touches).find(t => t.identifier === currentTouchId);
+            if (!touch) return;
+            
+            updateStickPosition(touch.clientX, touch.clientY);
+        };
+        
+        const handleTouchEnd = (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            
+            const touch = Array.from(e.changedTouches).find(t => t.identifier === currentTouchId);
+            if (touch) {
+                resetStick();
+            }
+        };
+        
+        const handleTouchCancel = (e) => {
+            e.preventDefault();
+            resetStick();
+        };
+        
+        // Mouse events (for testing on desktop)
+        const handleMouseDown = (e) => {
+            if (isMobile) return; // Only use mouse on non-mobile for testing
+            e.preventDefault();
+            isDragging = true;
+            stick.classList.add('dragging');
+            
+            updateStickPosition(e.clientX, e.clientY);
+        };
+        
+        const handleMouseMove = (e) => {
+            if (!isDragging || isMobile) return;
+            e.preventDefault();
+            updateStickPosition(e.clientX, e.clientY);
+        };
+        
+        const handleMouseUp = (e) => {
+            if (!isDragging || isMobile) return;
+            e.preventDefault();
+            resetStick();
+        };
+        
+        // Add event listeners
+        base.addEventListener('touchstart', handleTouchStart, { passive: false });
+        document.addEventListener('touchmove', handleTouchMove, { passive: false });
+        document.addEventListener('touchend', handleTouchEnd, { passive: false });
+        document.addEventListener('touchcancel', handleTouchCancel, { passive: false });
+        
+        // Mouse events for desktop testing
+        if (!isMobile) {
+            base.addEventListener('mousedown', handleMouseDown);
+            document.addEventListener('mousemove', handleMouseMove);
+            document.addEventListener('mouseup', handleMouseUp);
+        }
     }
 
 
@@ -185,18 +331,24 @@ class Game {
     }
 
     initializeGame(customization) {
-        // Initialize iceberg
-        this.iceberg = new Iceberg(this.canvas);
+        // Initialize iceberg in world space (centered at world origin)
+        this.iceberg = new Iceberg(this.canvas, 0, 0);
         
-        // Create local penguin (using default color)
+        // Create local penguin at world origin (will be centered on screen via camera)
         this.localPenguin = new Penguin(
-            this.canvas.width / 2,
-            this.canvas.height / 2,
+            0, // World X (camera will center on this)
+            0, // World Y (camera will center on this)
             Penguin.defaultColor,
             customization.hat,
             'local',
             true
         );
+        
+        // Initialize camera to center on penguin
+        this.camera.x = 0;
+        this.camera.y = 0;
+        this.camera.targetX = 0;
+        this.camera.targetY = 0;
         
         // Initialize emoji system
         this.emojiSystem = new EmojiSystem();
@@ -209,6 +361,12 @@ class Game {
         
         // Setup end session button
         this.setupEndSessionButton();
+        
+        // Setup instructions close button
+        this.setupInstructionsClose();
+        
+        // Setup instructions modal
+        this.setupInstructionsModal();
         
         // Start game loop
         this.running = true;
@@ -364,6 +522,59 @@ class Game {
                     this.backgroundMusic.pause();
                 }
                 this.endSession();
+            });
+        }
+    }
+
+    setupInstructionsClose() {
+        const instructionsClose = document.getElementById('instructions-close');
+        const instructions = document.getElementById('instructions');
+        if (instructionsClose && instructions) {
+            instructionsClose.addEventListener('click', () => {
+                // UI click sound
+                this.playUiClickSound();
+                // Hide instructions
+                instructions.classList.add('hidden');
+            });
+        }
+    }
+
+    setupInstructionsModal() {
+        const instructionsButton = document.getElementById('instructions-button');
+        const instructionsModal = document.getElementById('instructions-modal');
+        const modalClose = document.getElementById('instructions-modal-close');
+        const modalCloseButton = document.getElementById('close-instructions-modal-button');
+        
+        if (instructionsButton && instructionsModal) {
+            // Open modal
+            instructionsButton.addEventListener('click', () => {
+                // UI click sound
+                this.playUiClickSound();
+                // Show modal
+                instructionsModal.style.display = 'flex';
+            });
+            
+            // Close modal handlers
+            const closeModal = () => {
+                // UI click sound
+                this.playUiClickSound();
+                // Hide modal
+                instructionsModal.style.display = 'none';
+            };
+            
+            if (modalClose) {
+                modalClose.addEventListener('click', closeModal);
+            }
+            
+            if (modalCloseButton) {
+                modalCloseButton.addEventListener('click', closeModal);
+            }
+            
+            // Close modal when clicking outside
+            instructionsModal.addEventListener('click', (e) => {
+                if (e.target === instructionsModal) {
+                    closeModal();
+                }
             });
         }
     }
@@ -563,27 +774,67 @@ class Game {
             let dy = 0;
             let direction = 'idle';
             
-            if (this.keys['ArrowLeft'] || this.keys['a'] || this.keys['A']) {
-                dx = -speed * deltaTime;
-                direction = 'left';
-            }
-            if (this.keys['ArrowRight'] || this.keys['d'] || this.keys['D']) {
-                dx = speed * deltaTime;
-                direction = 'right';
-            }
-            if (this.keys['ArrowUp'] || this.keys['w'] || this.keys['W']) {
-                dy = -speed * deltaTime;
-                direction = direction === 'idle' ? 'up' : direction;
-            }
-            if (this.keys['ArrowDown'] || this.keys['s'] || this.keys['S']) {
-                dy = speed * deltaTime;
-                direction = direction === 'idle' ? 'down' : direction;
+            // Check for mobile controller input
+            const controllerThreshold = 0.1; // Minimum input to register movement
+            const hasControllerInput = this.mobileControllerActive && 
+                (Math.abs(this.controllerDirection.x) > controllerThreshold || 
+                 Math.abs(this.controllerDirection.y) > controllerThreshold);
+            
+            if (hasControllerInput) {
+                // Use controller input
+                dx = this.controllerDirection.x * speed * deltaTime;
+                dy = this.controllerDirection.y * speed * deltaTime;
+                
+                // Determine direction based on controller input
+                if (Math.abs(this.controllerDirection.x) > Math.abs(this.controllerDirection.y)) {
+                    direction = this.controllerDirection.x > 0 ? 'right' : 'left';
+                } else if (Math.abs(this.controllerDirection.y) > controllerThreshold) {
+                    direction = this.controllerDirection.y > 0 ? 'down' : 'up';
+                }
+            } else {
+                // Use keyboard input
+                if (this.keys['ArrowLeft'] || this.keys['a'] || this.keys['A']) {
+                    dx = -speed * deltaTime;
+                    direction = 'left';
+                }
+                if (this.keys['ArrowRight'] || this.keys['d'] || this.keys['D']) {
+                    dx = speed * deltaTime;
+                    direction = 'right';
+                }
+                if (this.keys['ArrowUp'] || this.keys['w'] || this.keys['W']) {
+                    dy = -speed * deltaTime;
+                    direction = direction === 'idle' ? 'up' : direction;
+                }
+                if (this.keys['ArrowDown'] || this.keys['s'] || this.keys['S']) {
+                    dy = speed * deltaTime;
+                    direction = direction === 'idle' ? 'down' : direction;
+                }
             }
             
+            // Calculate new position in world space
+            let newX = this.localPenguin.x + dx;
+            let newY = this.localPenguin.y + dy;
+            
+            // Constrain to world boundaries (walls)
+            const penguinRadius = this.localPenguin.width / 2;
+            newX = Math.max(this.worldBounds.minX + penguinRadius, 
+                          Math.min(this.worldBounds.maxX - penguinRadius, newX));
+            newY = Math.max(this.worldBounds.minY + penguinRadius, 
+                          Math.min(this.worldBounds.maxY - penguinRadius, newY));
+            
             // Update position
-            this.localPenguin.x += dx;
-            this.localPenguin.y += dy;
+            this.localPenguin.x = newX;
+            this.localPenguin.y = newY;
             this.localPenguin.direction = direction;
+            
+            // Update camera to follow penguin (smoothly)
+            this.camera.targetX = this.localPenguin.x;
+            this.camera.targetY = this.localPenguin.y;
+            
+            // Smooth camera interpolation
+            const cameraLerp = this.camera.followSpeed;
+            this.camera.x += (this.camera.targetX - this.camera.x) * cameraLerp;
+            this.camera.y += (this.camera.targetY - this.camera.y) * cameraLerp;
 
             // Movement sound: play while moving, stop when idle
             const isMoving = direction !== 'idle';
@@ -603,26 +854,58 @@ class Game {
         this.ctx.fillStyle = '#87CEEB'; // Sky blue (ocean)
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         
-        // Draw ocean pattern
+        // Apply camera transform (translate to center penguin on screen)
+        this.ctx.save();
+        const cameraOffsetX = this.canvas.width / 2 - this.camera.x;
+        const cameraOffsetY = this.canvas.height / 2 - this.camera.y;
+        this.ctx.translate(cameraOffsetX, cameraOffsetY);
+        
+        // Draw ocean pattern (in world space)
         this.drawOcean();
         
-        // Draw iceberg
+        // Draw iceberg (in world space)
         if (this.iceberg) {
-            this.iceberg.render();
+            this.iceberg.render(this.ctx);
         }
         
-        // Draw local penguin
+        // Draw local penguin (in world space)
         if (this.localPenguin) {
             this.localPenguin.render(this.ctx);
         }
+        
+        // Restore transform
+        this.ctx.restore();
     }
 
     drawOcean() {
-        // Simple wave pattern
+        // Draw ocean pattern across the visible world area
+        // Calculate visible area based on camera (in world coordinates)
+        const visibleLeft = this.camera.x - this.canvas.width / 2 - 100; // Add padding
+        const visibleRight = this.camera.x + this.canvas.width / 2 + 100;
+        const visibleTop = this.camera.y - this.canvas.height / 2 - 100;
+        const visibleBottom = this.camera.y + this.canvas.height / 2 + 100;
+        
+        // Draw waves across visible area
         this.ctx.fillStyle = '#4682B4';
-        for (let i = 0; i < this.canvas.width; i += 20) {
+        const waveStart = Math.floor(visibleLeft / 20) * 20;
+        const waveEnd = Math.ceil(visibleRight / 20) * 20;
+        
+        // Ocean level - draw at bottom of visible area or world bounds
+        const oceanLevel = Math.min(visibleBottom - 50, this.worldBounds.maxY - 50);
+        const oceanHeight = 100; // Height of ocean waves
+        
+        for (let i = waveStart; i <= waveEnd; i += 20) {
             const wave = Math.sin(Date.now() * 0.001 + i * 0.01) * 5;
-            this.ctx.fillRect(i, this.canvas.height - 50 + wave, 20, 50);
+            this.ctx.fillRect(i, oceanLevel + wave, 20, oceanHeight);
+        }
+        
+        // Also draw ocean at top if visible
+        const topOceanLevel = Math.max(visibleTop + 50, this.worldBounds.minY + 50);
+        if (visibleTop < topOceanLevel) {
+            for (let i = waveStart; i <= waveEnd; i += 20) {
+                const wave = Math.sin(Date.now() * 0.001 + i * 0.01) * 5;
+                this.ctx.fillRect(i, topOceanLevel + wave, 20, oceanHeight);
+            }
         }
     }
 

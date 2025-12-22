@@ -67,6 +67,7 @@
         
         <button id="sound-toggle" class="sound-toggle" title="Sound FX">🔊</button>
         <button id="music-toggle" class="music-toggle" title="BGM">🎵</button>
+        <button id="instructions-button" class="instructions-button" title="Instructions">ℹ</button>
         
         <div class="emoji-ui">
             <button class="emoji-button" data-emoji="happy" title="Happy (1)">😊</button>
@@ -86,14 +87,39 @@
             <button class="emoji-button" data-emoji="smirk" title="Smirk">😏</button>
         </div>
 
-        <div class="instructions">
-            <p>Use arrow keys to waddle around! Click emojis to express yourself. Once you're done, click "End session"</p>
-        </div>
 
         <button id="end-session-button" class="end-session-button">End session</button>
-        
-        <div class="music-credit">
-            music brewed in house <a href="https://instagram.com/2kaimusic" target="_blank" rel="noopener noreferrer">@2kaimusic</a>
+
+        <!-- Mobile Controller -->
+        <div id="mobile-controller" class="mobile-controller">
+            <div class="controller-base">
+                <div id="controller-stick" class="controller-stick"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="instructions-modal" class="instructions-modal" style="display: none;">
+        <div class="instructions-modal-content">
+            <button class="instructions-modal-close" id="instructions-modal-close" aria-label="Close instructions">×</button>
+            <h2>Info</h2>
+            <div class="instructions-section">
+                <h3>How to Play</h3>
+                <ul>
+                    <li>Use <strong>arrow keys</strong> (or joystick controller on mobile) to waddle around the open world</li>
+                    <li>Click <strong>emoji buttons</strong> at the bottom to express yourself</li>
+                    <li>When you're done, click <strong>"End session"</strong> to see your mood summary</li>
+                </ul>
+            </div>
+            <div class="game-inspiration-section">
+                <h3>Game Inspiration</h3>
+                <p>Penguin Vibe is a safe space for emotional expression and self-reflection. Inspired by the need for digital sanctuaries, this game encourages you to:</p>
+                <ul>
+                    <li>Express & reflect on your emotions freely through emojis</li>
+                    <li>Explore an open world at your own pace</li>
+                    <li>Listen to peaceful music and sounds, created by <a href="https://instagram.com/2kaimusic" target="_blank" rel="noopener noreferrer">@2kaimusic</a></li>
+                </ul>
+            </div>
+            <button id="close-instructions-modal-button" class="close-instructions-modal-button">Close</button>
         </div>
     </div>
 
