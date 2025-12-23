@@ -31,6 +31,9 @@ class Customization {
             { hat: 'beanie', emoji: '🧶', name: 'Winter Beanie' }
         ];
         
+        this.clickSound = null;
+        this.initClickSound();
+        
         this.setupEventListeners();
         this.setupClickSounds();
         this.renderHats();
@@ -38,11 +41,35 @@ class Customization {
         // Set initial background color
         this.updateBackgroundColor();
     }
+    
+    initClickSound() {
+        try {
+            this.clickSound = new Audio('/assets/computer_click.mp3');
+            this.clickSound.volume = 0.5;
+        } catch (e) {
+            console.warn('Failed to initialize click sound:', e);
+        }
+    }
+    
+    playClickSound() {
+        if (this.clickSound) {
+            try {
+                this.clickSound.currentTime = 0; // Reset to start
+                this.clickSound.play().catch(e => {
+                    // Ignore play errors (e.g., user hasn't interacted yet)
+                });
+            } catch (e) {
+                // Fail silently
+            }
+        }
+    }
 
     setupEventListeners() {
         // Mode selection
         this.modeGrid.querySelectorAll('.mode-option').forEach(option => {
             option.addEventListener('click', () => {
+                this.playClickSound();
+                
                 // Remove previous selection
                 this.modeGrid.querySelectorAll('.mode-option').forEach(opt => {
                     opt.classList.remove('selected');
@@ -71,6 +98,8 @@ class Customization {
         this.hatGrid.addEventListener('click', (e) => {
             const option = e.target.closest('.hat-option');
             if (option) {
+                this.playClickSound();
+                
                 // Remove previous selection
                 this.hatGrid.querySelectorAll('.hat-option').forEach(opt => {
                     opt.classList.remove('selected');
@@ -85,6 +114,7 @@ class Customization {
 
         // Join button
         this.joinButton.addEventListener('click', () => {
+            this.playClickSound();
             this.onJoin();
         });
     }
@@ -121,23 +151,9 @@ class Customization {
     }
 
     setupClickSounds() {
-        const playClick = () => {
-            if (window.game && typeof window.game.playUiClickSound === 'function') {
-                window.game.playUiClickSound();
-            }
-        };
-
-        // Buttons on the customization screen (e.g., Join)
-        const buttons = document.querySelectorAll('#customization-screen button');
-        buttons.forEach(button => {
-            button.addEventListener('click', playClick);
-        });
-
-        // Hat selections (party hat, egg, etc.)
-        const hatOptions = this.hatGrid.querySelectorAll('.hat-option');
-        hatOptions.forEach(option => {
-            option.addEventListener('click', playClick);
-        });
+        // Click sounds are now handled directly in setupEventListeners()
+        // where we call this.playClickSound() for each button click
+        // This method is kept for backward compatibility but no longer needed
     }
 
     renderPreview() {

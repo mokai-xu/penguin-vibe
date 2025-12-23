@@ -691,13 +691,15 @@ class Game {
         }
 
         // Categorize emojis
-        const positive = ['happy', 'laughing', 'cool', 'cowboy_face', 'silly', 'surprised', 'smirk'];
-        const neutral = ['relieved', 'thinking', 'hot'];
+        const positive = ['happy', 'laughing', 'cool', 'cowboy_face', 'silly', 'surprised'];
+        const neutral = ['relieved', 'thinking'];
         const negative = ['sad', 'angry', 'tired', 'dizzy', 'clown'];
+        const smirk = ['smirk', 'hot'];
         
         let positiveCount = 0;
         let neutralCount = 0;
         let negativeCount = 0;
+        let smirkCount = 0;
         
         Object.keys(counts).forEach(emoji => {
             const count = counts[emoji];
@@ -707,6 +709,8 @@ class Game {
                 neutralCount += count;
             } else if (negative.includes(emoji)) {
                 negativeCount += count;
+            } else if (smirk.includes(emoji)) {
+                smirkCount += count;
             }
         });
 
@@ -737,6 +741,9 @@ class Game {
         } else if (negativeCount > positiveCount && negativeCount > neutralCount) {
             summary += `You used ${emojiMap[mostUsed] || mostUsed} the most, indicating you might be processing some challenging feelings. `;
             summary += `That's completely valid - expressing difficult emotions is an important part of self-care.`;
+        } else if (smirkCount > positiveCount && smirkCount > negativeCount && smirkCount > neutralCount) {
+            summary += `You used ${emojiMap[mostUsed] || mostUsed} the most, indicating you might be processing some complex feelings. `;
+            summary += `That's completely valid - it'll get better in the summer I promise`;
         } else {
             summary += `Your emoji usage shows a balanced mix of emotions. `;
             summary += `You used ${emojiMap[mostUsed] || mostUsed} most frequently, reflecting a thoughtful and reflective state of mind.`;
