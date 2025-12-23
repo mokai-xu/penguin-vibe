@@ -65,112 +65,8 @@ class Game {
         this.loadEncouragements();
         
         // Holiday wishes for Christmas mode
-        this.holidayWishes = [
-            "Hope you have yourself a holiday to remember!",
-            "Wishing you a season filled with warmth and joy!",
-            "May your holidays be merry and bright!",
-            "Sending you festive cheer and holiday happiness!",
-            "Hope your holidays sparkle with joy and laughter!",
-            "Wishing you a wonderful holiday season!",
-            "May your holidays be filled with love and laughter!",
-            "Hope you have a magical and memorable holiday!",
-            "Wishing you peace, joy, and happiness this holiday season!",
-            "May your holidays be as wonderful as you are!",
-            "Hope your holiday season is filled with special moments!",
-            "Wishing you a holiday filled with warmth and wonder!",
-            "May your holidays be merry, bright, and full of cheer!",
-            "Hope you have a holiday season that's simply magical!",
-            "Wishing you joy, peace, and happiness this holiday!",
-            "May your holidays be filled with love and good cheer!",
-            "Hope you have a holiday to remember and cherish!",
-            "Wishing you a season of joy, laughter, and love!",
-            "May your holidays sparkle with happiness and joy!",
-            "Hope your holiday season is filled with wonderful memories!",
-            "Wishing you a festive and joyful holiday season!",
-            "May your holidays be merry, bright, and absolutely wonderful!",
-            "Hope you have a holiday filled with love and laughter!",
-            "Wishing you peace, happiness, and holiday cheer!",
-            "May your holidays be as special and wonderful as you!",
-            "Hope your holiday season brings you endless joy!",
-            "Wishing you a magical holiday filled with happiness!",
-            "May your holidays be filled with warmth and wonder!",
-            "Hope you have a holiday season that's truly magical!",
-            "Wishing you joy, laughter, and love this holiday!",
-            "May your holidays be merry, bright, and full of cheer!",
-            "Hope you have a holiday to remember forever!",
-            "Wishing you a season filled with special moments!",
-            "May your holidays sparkle with joy and happiness!",
-            "Hope your holiday season is filled with wonderful memories!",
-            "Wishing you a festive and joyful holiday!",
-            "May your holidays be merry, bright, and absolutely perfect!",
-            "Hope you have a holiday filled with love and cheer!",
-            "Wishing you peace, happiness, and holiday magic!",
-            "May your holidays be as wonderful and special as you!",
-            "Hope your holiday season brings you endless happiness!",
-            "Wishing you a magical holiday filled with joy!",
-            "May your holidays be filled with warmth and love!",
-            "Hope you have a holiday season that's truly wonderful!",
-            "Wishing you joy, laughter, and endless cheer!",
-            "May your holidays be merry, bright, and full of love!",
-            "Hope you have a holiday to remember and treasure!",
-            "Wishing you a season filled with happiness and joy!",
-            "May your holidays sparkle with magic and wonder!",
-            "Hope your holiday season is filled with special moments!",
-            "Wishing you a festive and joyful holiday season!",
-            "May your holidays be merry, bright, and absolutely amazing!",
-            "Hope you have a holiday filled with love and happiness!",
-            "Wishing you peace, joy, and holiday cheer!",
-            "May your holidays be as special and wonderful as you are!",
-            "Hope your holiday season brings you endless joy and laughter!",
-            "Wishing you a magical holiday filled with warmth!",
-            "May your holidays be filled with wonder and happiness!",
-            "Hope you have a holiday season that's truly magical and special!",
-            "Wishing you joy, laughter, and holiday magic!",
-            "May your holidays be merry, bright, and full of wonderful moments!",
-            "Hope you have a holiday to remember with a smile!",
-            "Wishing you a season filled with love and joy!",
-            "May your holidays sparkle with happiness and cheer!",
-            "Hope your holiday season is filled with wonderful memories to treasure!",
-            "Wishing you a festive and joyful holiday filled with love!",
-            "May your holidays be merry, bright, and absolutely perfect in every way!",
-            "Hope you have a holiday filled with warmth and happiness!",
-            "Wishing you peace, joy, and endless holiday cheer!",
-            "May your holidays be as wonderful and special as you deserve!",
-            "Hope your holiday season brings you endless happiness and love!",
-            "Wishing you a magical holiday filled with joy and laughter!",
-            "May your holidays be filled with wonder, love, and happiness!",
-            "Hope you have a holiday season that's truly magical and unforgettable!",
-            "Wishing you joy, laughter, and holiday magic that lasts all year!",
-            "May your holidays be merry, bright, and full of wonderful moments to cherish!",
-            "Hope you have a holiday to remember with a heart full of joy!",
-            "Wishing you a season filled with love, laughter, and endless happiness!",
-            "May your holidays sparkle with magic, wonder, and joy!",
-            "Hope your holiday season is filled with special moments to treasure forever!",
-            "Wishing you a festive and joyful holiday filled with warmth and love!",
-            "May your holidays be merry, bright, and absolutely perfect in every wonderful way!",
-            "Hope you have a holiday filled with love, laughter, and happiness!",
-            "Wishing you peace, joy, and holiday cheer that fills your heart!",
-            "May your holidays be as special and wonderful as you make them!",
-            "Hope your holiday season brings you endless joy, laughter, and love!",
-            "Wishing you a magical holiday filled with warmth and happiness!",
-            "May your holidays be filled with wonder, love, and endless cheer!",
-            "Hope you have a holiday season that's truly magical, special, and unforgettable!",
-            "Wishing you joy, laughter, and holiday magic that brings smiles all year long!",
-            "May your holidays be merry, bright, and full of wonderful moments to remember!",
-            "Hope you have a holiday to remember with a heart full of joy and love!",
-            "Wishing you a season filled with love, laughter, and endless happiness and cheer!",
-            "May your holidays sparkle with magic, wonder, joy, and all things wonderful!",
-            "Hope your holiday season is filled with special moments to treasure and cherish forever!",
-            "Wishing you a festive and joyful holiday filled with warmth, love, and happiness!",
-            "May your holidays be merry, bright, and absolutely perfect in every wonderful and magical way!",
-            "Hope you have a holiday filled with love, laughter, happiness, and endless joy!",
-            "Wishing you peace, joy, and holiday cheer that fills your heart with warmth!",
-            "May your holidays be as special and wonderful as you make every moment!",
-            "Hope your holiday season brings you endless joy, laughter, love, and happiness!",
-            "Wishing you a magical holiday filled with warmth, happiness, and all things wonderful!",
-            "May your holidays be filled with wonder, love, endless cheer, and magical moments!",
-            "Hope you have a holiday season that's truly magical, special, unforgettable, and absolutely perfect!"
-        ];
+        this.holidayWishes = [];
+        this.loadHolidayWishes();
         
         // Wait for customization
         window.addEventListener('customizationComplete', (e) => {
@@ -188,6 +84,55 @@ class Game {
             // Fallback to default encouragements if file can't be loaded
             this.setDefaultEncouragements();
         }
+    }
+
+    async loadHolidayWishes() {
+        try {
+            const response = await fetch('/assets/holiday_wishes.txt');
+            const text = await response.text();
+            this.parseHolidayWishes(text);
+        } catch (error) {
+            console.error('Failed to load holiday wishes, using defaults:', error);
+            // Fallback to default holiday wishes if file can't be loaded
+            this.setDefaultHolidayWishes();
+        }
+    }
+
+    parseHolidayWishes(text) {
+        const lines = text.split('\n');
+        let inHolidayWishesSection = false;
+        
+        for (const line of lines) {
+            const trimmed = line.trim();
+            if (!trimmed) continue;
+            
+            if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+                const section = trimmed.slice(1, -1);
+                inHolidayWishesSection = (section === 'HOLIDAY_WISHES');
+            } else if (inHolidayWishesSection && trimmed) {
+                this.holidayWishes.push(trimmed);
+            }
+        }
+        
+        // If no holiday wishes loaded, use defaults
+        if (this.holidayWishes.length === 0) {
+            this.setDefaultHolidayWishes();
+        }
+    }
+
+    setDefaultHolidayWishes() {
+        this.holidayWishes = [
+            "Hope you have yourself a holiday to remember!",
+            "Wishing you a season filled with warmth and joy!",
+            "May your holidays be merry and bright!",
+            "Sending you festive cheer and holiday happiness!",
+            "Hope your holidays sparkle with joy and laughter!",
+            "Wishing you a wonderful holiday season!",
+            "May your holidays be filled with love and laughter!",
+            "Hope you have a magical and memorable holiday!",
+            "Wishing you peace, joy, and happiness this holiday season!",
+            "May your holidays be as wonderful as you are!"
+        ];
     }
 
     parseEncouragements(text) {
