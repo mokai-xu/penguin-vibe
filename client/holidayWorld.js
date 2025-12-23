@@ -9,6 +9,14 @@ class HolidayWorld {
         this.worldX = worldX;
         this.worldY = worldY;
         
+        // Load tree image
+        this.treeImage = new Image();
+        this.treeImage.src = '/assets/tree.png';
+        this.treeImageLoaded = false;
+        this.treeImage.onload = () => {
+            this.treeImageLoaded = true;
+        };
+        
         // Generate trees and ponds
         this.trees = this.generateTrees();
         this.ponds = this.generatePonds();
@@ -231,7 +239,20 @@ class HolidayWorld {
         this.trees.forEach(tree => {
             if (tree.x + tree.size > visibleLeft && tree.x - tree.size < visibleRight &&
                 tree.y + tree.size > visibleTop && tree.y - tree.size < visibleBottom) {
-                this.drawTree(ctx, tree);
+                if (this.treeImageLoaded) {
+                    // Draw tree image
+                    const imageSize = tree.size * 1.5; // Scale image to match tree size
+                    ctx.drawImage(
+                        this.treeImage,
+                        tree.x - imageSize / 2,
+                        tree.y - imageSize + tree.trunkHeight, // Position so trunk is at tree.y
+                        imageSize,
+                        imageSize
+                    );
+                } else {
+                    // Fallback: draw tree with canvas if image not loaded
+                    this.drawTree(ctx, tree);
+                }
             }
         });
         

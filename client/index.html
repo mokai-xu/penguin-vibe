@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Penguin Vibe - Waddle Together!</title>
+    <title>Penguin Vibe - Waddle in your feels!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div id="customization-screen" class="customization-screen">
         <div class="customization-modal">
-            <h1 class="main-title">Meet your penguin pal ☺️</h1>
+            <h1 class="main-title">Penguin Vibe</h1>
             <p class="subtitle">This is a safe place to express yourself.</p>
             
             <div class="customization-section">
@@ -39,10 +43,6 @@
                     <div class="hat-option" data-hat="egg">
                         <div class="hat-preview">🥚</div>
                         <span>Egg</span>
-                    </div>
-                    <div class="hat-option" data-hat="fedora">
-                        <div class="hat-preview">🎩</div>
-                        <span>Fedora</span>
                     </div>
                     <div class="hat-option" data-hat="magician">
                         <div class="hat-preview">🎩</div>
@@ -112,7 +112,7 @@
             </div>
             <div class="game-inspiration-section">
                 <h3>Game Inspiration</h3>
-                <p>Penguin Vibe is a safe space for emotional expression and self-reflection. Inspired by the need for digital sanctuaries, this game encourages you to:</p>
+                <p><a href="https://github.com/mokai-xu/penguin-vibe" target="_blank" rel="noopener noreferrer"></a>Penguin Vibe</a> is a safe space for emotional expression and self-reflection. Inspired by the need for digital sanctuaries, this game encourages you to:</p>
                 <ul>
                     <li>Express & reflect on your emotions freely through emojis</li>
                     <li>Explore an open world at your own pace</li>
@@ -131,10 +131,15 @@
             </div>
             <div id="mood-summary" class="mood-summary"></div>
             <div id="encouragement" class="encouragement"></div>
-            <button id="close-results-button" class="close-results-button">Close</button>
+            <div class="results-buttons">
+                <button id="share-results-button" class="share-results-button">Share</button>
+                <button id="close-results-button" class="close-results-button">Close</button>
+            </div>
+            <p class="results-attribution">made with ♥ on penguin-vibe.onrender.com</p>
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="spriteSheet.js"></script>
     <script src="iceberg.js"></script>
     <script src="holidayWorld.js"></script>

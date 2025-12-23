@@ -14,7 +14,6 @@ class Customization {
             { hat: 'none', emoji: 'None', name: 'None' },
             { hat: 'party', emoji: '🎉', name: 'Party Hat' },
             { hat: 'egg', emoji: '🥚', name: 'Egg' },
-            { hat: 'fedora', emoji: '🎩', name: 'Fedora' },
             { hat: 'magician', emoji: '🎩', name: 'Magician' },
             { hat: 'bow', emoji: '🎀', name: 'Red Bow' },
             { hat: 'cowboy', emoji: '🤠', name: 'Cowboy' },

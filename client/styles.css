@@ -5,7 +5,7 @@
 }
 
 body {
-    font-family: 'Courier New', 'Monaco', monospace;
+    font-family: 'Roboto Mono', monospace;
     background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
     overflow: hidden;
     height: 100vh;
@@ -64,7 +64,6 @@ body {
     margin-bottom: 25px;
     font-size: 2.2em;
     font-weight: bold;
-    text-shadow: 2px 2px 0px #87CEEB; /* Light blue text shadow */
     image-rendering: pixelated;
 }
 
@@ -85,7 +84,6 @@ body {
     margin-bottom: 15px;
     font-size: 1.4em;
     font-weight: bold;
-    text-shadow: 1px 1px 0px #87CEEB;
 }
 
 .mode-grid {
@@ -214,17 +212,16 @@ body {
 }
 
 .main-title {
+    font-family: 'Press Start 2P', cursive;
     font-size: 3em;
     margin-bottom: 10px;
     color: #000000;
-    text-shadow: 2px 2px 0px #87CEEB;
 }
 
 .subtitle {
     font-size: 1.2em;
     color: #000000;
     margin-bottom: 25px;
-    text-shadow: 1px 1px 0px #87CEEB;
 }
 
 .join-button {
@@ -612,7 +609,6 @@ body {
     color: #000000;
     margin-bottom: 30px;
     font-size: 2.5em;
-    text-shadow: 2px 2px 0px #87CEEB;
     text-align: center;
 }
 
@@ -633,7 +629,6 @@ body {
     color: #000000;
     margin-bottom: 15px;
     font-size: 1.6em;
-    text-shadow: 1px 1px 0px #87CEEB;
 }
 
 .instructions-section ul,
@@ -751,7 +746,6 @@ body {
 
 .session-results.holiday-mode .results-modal h2 {
     color: #2D5016;
-    text-shadow: 2px 2px 0px #4A7C2A; /* Lighter pine green shadow */
 }
 
 .session-results.holiday-mode .mood-summary,
@@ -763,7 +757,6 @@ body {
 .session-results.holiday-mode .mood-summary h3,
 .session-results.holiday-mode .encouragement h3 {
     color: #2D5016;
-    text-shadow: 1px 1px 0px #4A7C2A;
 }
 
 .session-results.holiday-mode .mood-summary p,
@@ -776,12 +769,14 @@ body {
     border-color: #2D5016;
 }
 
+.session-results.holiday-mode .share-results-button,
 .session-results.holiday-mode .close-results-button {
     background: #4A7C2A; /* Pine green button */
     border-color: #2D5016;
     color: #FFFFFF;
 }
 
+.session-results.holiday-mode .share-results-button:hover,
 .session-results.holiday-mode .close-results-button:hover {
     background: #5A8C3A; /* Lighter pine green on hover */
 }
@@ -805,7 +800,6 @@ body {
     color: #000000;
     margin-bottom: 20px;
     font-size: 2em;
-    text-shadow: 2px 2px 0px #87CEEB;
 }
 
 .penguin-preview-container {
@@ -833,14 +827,13 @@ body {
     box-shadow: 
         0 0 0 2px #87CEEB,
         3px 3px 0px #000000;
-    text-align: left;
+    text-align: center;
 }
 
 .mood-summary h3 {
     color: #000000;
     margin-bottom: 15px;
     font-size: 1.4em;
-    text-shadow: 1px 1px 0px #87CEEB;
 }
 
 .mood-summary p {
@@ -864,7 +857,6 @@ body {
     color: #000000;
     margin-bottom: 15px;
     font-size: 1.4em;
-    text-shadow: 1px 1px 0px #87CEEB;
 }
 
 .encouragement p {
@@ -874,6 +866,23 @@ body {
     font-weight: bold;
 }
 
+.results-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.results-attribution {
+    text-align: center;
+    font-size: 0.75em;
+    color: #000000;
+    opacity: 0.5;
+    margin-top: 15px;
+    margin-bottom: 0;
+}
+
+.share-results-button,
 .close-results-button {
     background: #FFD700;
     color: #000000;
@@ -892,6 +901,7 @@ body {
     image-rendering: pixelated;
 }
 
+.share-results-button:hover,
 .close-results-button:hover {
     transform: translate(-2px, -2px);
     box-shadow: 
@@ -900,6 +910,7 @@ body {
     background: #FFED4E;
 }
 
+.share-results-button:active,
 .close-results-button:active {
     transform: translate(1px, 1px);
     box-shadow: 
@@ -967,6 +978,18 @@ body {
     
     .customization-modal h1 {
         font-size: 1.8em;
+    }
+    
+    .mode-grid {
+        gap: 10px;
+    }
+    
+    .mode-option {
+        padding: 12px;
+    }
+    
+    .mode-option span {
+        font-size: 1em;
     }
     
     .hat-grid {
@@ -1096,6 +1119,7 @@ body {
         line-height: 1.5;
     }
     
+    .share-results-button,
     .close-results-button {
         padding: 11px 28px;
         font-size: 1.05em;
@@ -1104,6 +1128,18 @@ body {
 
 /* Extra small screens */
 @media (max-width: 480px) {
+    .mode-grid {
+        gap: 8px;
+    }
+    
+    .mode-option {
+        padding: 10px 8px;
+    }
+    
+    .mode-option span {
+        font-size: 0.9em;
+    }
+    
     .hat-grid {
         grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
         gap: 8px;
@@ -1205,6 +1241,7 @@ body {
         line-height: 1.5;
     }
     
+    .share-results-button,
     .close-results-button {
         padding: 11px 28px;
         font-size: 1.05em;
@@ -1213,6 +1250,18 @@ body {
 
 /* Extra small screens */
 @media (max-width: 480px) {
+    .mode-grid {
+        gap: 8px;
+    }
+    
+    .mode-option {
+        padding: 10px 8px;
+    }
+    
+    .mode-option span {
+        font-size: 0.9em;
+    }
+    
     .hat-grid {
         grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
         gap: 8px;

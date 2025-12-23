@@ -14,6 +14,14 @@ class Iceberg {
         this.floatSpeed = 0.002;
         this.floatAmount = 3;
         
+        // Load snow clump image
+        this.snowClumpImage = new Image();
+        this.snowClumpImage.src = '/assets/snow_clump.png';
+        this.snowClumpImageLoaded = false;
+        this.snowClumpImage.onload = () => {
+            this.snowClumpImageLoaded = true;
+        };
+        
         // Initialize iceberg dimensions
         this.updateDimensions();
         
@@ -246,38 +254,23 @@ class Iceberg {
         for (const clump of this.snowClumps) {
             renderCtx.save();
             renderCtx.translate(clump.x, clump.y);
-            renderCtx.rotate(clump.rotation || 0);
+            renderCtx.globalAlpha = clump.opacity;
             
-            if (clump.type === 'triangle') {
-                // Draw triangular snow clump
-                renderCtx.fillStyle = `rgba(255, 255, 255, ${clump.opacity})`;
-                renderCtx.beginPath();
-                // Draw triangle pointing up
-                renderCtx.moveTo(0, -clump.size); // Top point
-                renderCtx.lineTo(-clump.size * 0.866, clump.size * 0.5); // Bottom left
-                renderCtx.lineTo(clump.size * 0.866, clump.size * 0.5); // Bottom right
-                renderCtx.closePath();
-                renderCtx.fill();
-                
-                // Add a subtle highlight for depth
-                renderCtx.fillStyle = `rgba(255, 255, 255, ${clump.opacity * 0.5})`;
-                renderCtx.beginPath();
-                renderCtx.moveTo(0, -clump.size * 0.6); // Top point (smaller)
-                renderCtx.lineTo(-clump.size * 0.4, clump.size * 0.2); // Bottom left (smaller)
-                renderCtx.lineTo(clump.size * 0.4, clump.size * 0.2); // Bottom right (smaller)
-                renderCtx.closePath();
-                renderCtx.fill();
+            if (this.snowClumpImageLoaded) {
+                // Draw snow clump image (no rotation)
+                const imageSize = clump.size * 2; // Scale image to match size
+                renderCtx.drawImage(
+                    this.snowClumpImage,
+                    -imageSize / 2,
+                    -imageSize / 2,
+                    imageSize,
+                    imageSize
+                );
             } else {
-                // Draw circular snow clump
+                // Fallback: draw simple shape if image not loaded
                 renderCtx.fillStyle = `rgba(255, 255, 255, ${clump.opacity})`;
                 renderCtx.beginPath();
                 renderCtx.arc(0, 0, clump.size, 0, Math.PI * 2);
-                renderCtx.fill();
-                
-                // Add a subtle highlight for depth
-                renderCtx.fillStyle = `rgba(255, 255, 255, ${clump.opacity * 0.5})`;
-                renderCtx.beginPath();
-                renderCtx.arc(-clump.size * 0.3, -clump.size * 0.3, clump.size * 0.4, 0, Math.PI * 2);
                 renderCtx.fill();
             }
             

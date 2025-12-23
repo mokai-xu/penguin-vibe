@@ -767,9 +767,21 @@ class Game {
 
         const mostUsed = Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
         const emojiMap = {
+            // Default emojis
             happy: '😊', sad: '😢', relieved: '😌', silly: '😜', surprised: '😲',
             laughing: '😂', cool: '😎', cowboy_face: '🤠', angry: '😠', clown: '🤡',
-            tired: '😩', dizzy: '😵‍💫', thinking: '🤔', hot: '🥵', smirk: '😏'
+            tired: '😩', dizzy: '😵‍💫', thinking: '🤔', hot: '🥵', smirk: '😏',
+            // Holiday emojis
+            party_popper: '🎉',
+            gift: '🎁',
+            confetti: '🎊',
+            christmas_tree: '🎄',
+            partying: '🥳',
+            balloon: '🎈',
+            sparkles: '✨',
+            birthday_cake: '🎂',
+            dancing_woman: '💃',
+            dancing_man: '🕺'
         };
 
         let summary = `You expressed yourself ${total} time${total !== 1 ? 's' : ''} using ${unique} different emoji${unique !== 1 ? 's' : ''}. `;
@@ -911,6 +923,15 @@ class Game {
         // Show results screen
         resultsScreen.style.display = 'flex';
 
+        // Share button handler
+        const shareButton = document.getElementById('share-results-button');
+        if (shareButton) {
+            shareButton.onclick = async () => {
+                this.playUiClickSound();
+                await this.shareSessionResults(resultsScreen);
+            };
+        }
+
         // Close button handler
         closeButton.onclick = () => {
             // UI click sound
@@ -919,6 +940,104 @@ class Game {
             // Optionally reset the game or redirect
             location.reload(); // Reload to start fresh
         };
+    }
+
+    async shareSessionResults(resultsScreen) {
+        try {
+            // Check if Web Share API is available and supports files
+            if (navigator.share && navigator.canShare) {
+                // Use html2canvas to capture the results modal
+                const resultsModal = resultsScreen.querySelector('.results-modal');
+                if (!resultsModal) {
+                    console.error('Results modal not found');
+                    return;
+                }
+
+                // Capture screenshot
+                const canvas = await html2canvas(resultsModal, {
+                    backgroundColor: null,
+                    scale: 2, // Higher quality
+                    logging: false,
+                    useCORS: true
+                });
+
+                // Convert canvas to blob
+                canvas.toBlob(async (blob) => {
+                    if (!blob) {
+                        console.error('Failed to create blob from canvas');
+                        return;
+                    }
+
+                    const file = new File([blob], 'penguin-vibe-session.png', { type: 'image/png' });
+                    
+                    // Check if we can share this file
+                    if (navigator.canShare({ files: [file] })) {
+                        try {
+                            const shareData = {
+                                files: [file],
+                                title: 'My Penguin Vibe Session',
+                                text: 'Check out my Penguin Vibe session summary!',
+                                url: 'https://penguin-vibe.onrender.com'
+                            };
+                            await navigator.share(shareData);
+                        } catch (error) {
+                            if (error.name !== 'AbortError') {
+                                console.error('Error sharing:', error);
+                                // Fallback: download the image
+                                this.downloadSessionImage(canvas);
+                            }
+                        }
+                    } else {
+                        // Fallback: download the image
+                        this.downloadSessionImage(canvas);
+                    }
+                }, 'image/png');
+            } else {
+                // Fallback: download the image
+                const resultsModal = resultsScreen.querySelector('.results-modal');
+                if (resultsModal) {
+                    const canvas = await html2canvas(resultsModal, {
+                        backgroundColor: null,
+                        scale: 2,
+                        logging: false,
+                        useCORS: true
+                    });
+                    this.downloadSessionImage(canvas);
+                }
+            }
+        } catch (error) {
+            console.error('Error in shareSessionResults:', error);
+            // Fallback: try to download
+            try {
+                const resultsModal = resultsScreen.querySelector('.results-modal');
+                if (resultsModal) {
+                    const canvas = await html2canvas(resultsModal, {
+                        backgroundColor: null,
+                        scale: 2,
+                        logging: false,
+                        useCORS: true
+                    });
+                    this.downloadSessionImage(canvas);
+                }
+            } catch (fallbackError) {
+                console.error('Fallback download also failed:', fallbackError);
+                alert('Unable to share screenshot. Please try again.');
+            }
+        }
+    }
+
+    downloadSessionImage(canvas) {
+        // Create download link
+        canvas.toBlob((blob) => {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'penguin-vibe-session.png';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }, 'image/png');
     }
 
     update(deltaTime) {
@@ -1108,7 +1227,6 @@ window.addEventListener('DOMContentLoaded', () => {
     // Pre-load sprite sheet
     // You can change the path here if your sprite sheet is in a different location
     res = Penguin.loadSpriteSheet('/assets/penguin-sprites.png', 64, 64, 3);
-    console.log(res);
     
     window.game = new Game();
     new Customization();

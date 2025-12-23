@@ -524,15 +524,7 @@ class Penguin {
                 ctx.lineWidth = 1;
                 ctx.stroke();
                 break;
-                
-            case 'fedora':
-                // Fedora
-                ctx.fillStyle = '#3A3A3A';
-                ctx.fillRect(-7, hatY, 14, 2);
-                ctx.fillRect(-5, hatY + 2, 10, 4);
-                ctx.strokeRect(-7, hatY, 14, 2);
-                ctx.strokeRect(-5, hatY + 2, 10, 4);
-                break;
+            
                 
             case 'magician':
                 // Magician hat (tall cone)
