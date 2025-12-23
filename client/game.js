@@ -859,7 +859,7 @@ class Game {
             <p>${moodSummary.text}</p>
         `;
 
-        const encouragementTitle = this.mode === 'holiday' ? '🎄 Your Holiday Wish' : '💝 Your Daily Encouragement';
+        const encouragementTitle = this.mode === 'holiday' ? '🎄 Your Unique Holiday Wish' : '💝 Your Daily Encouragement';
         encouragementDiv.innerHTML = `
             <h3>${encouragementTitle}</h3>
             <p>${encouragement}</p>
@@ -1172,6 +1172,12 @@ window.addEventListener('DOMContentLoaded', () => {
     // Pre-load sprite sheet
     // You can change the path here if your sprite sheet is in a different location
     res = Penguin.loadSpriteSheet('/assets/penguin-sprites.png', 64, 64, 3);
+    // Pre-load hat images
+    Penguin.loadMagicHatImage();
+    Penguin.loadFriedEggImage();
+    Penguin.loadPartyHatImage();
+    Penguin.loadCowboyHatImage();
+    Penguin.loadPokemonHatImage();
     
     window.game = new Game();
     new Customization();

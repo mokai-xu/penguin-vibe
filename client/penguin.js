@@ -1,6 +1,91 @@
 class Penguin {
     static spriteSheet = null;
     static defaultColor = '#A8D5E2';
+    static magicHatImage = null;
+    static magicHatImageLoaded = false;
+    static friedEggImage = null;
+    static friedEggImageLoaded = false;
+    static partyHatImage = null;
+    static partyHatImageLoaded = false;
+    static cowboyHatImage = null;
+    static cowboyHatImageLoaded = false;
+    static pokemonHatImage = null;
+    static pokemonHatImageLoaded = false;
+    
+    static loadMagicHatImage() {
+        if (!Penguin.magicHatImage) {
+            Penguin.magicHatImage = new Image();
+            Penguin.magicHatImage.src = '/assets/hats/magic_hat.png';
+            Penguin.magicHatImage.onload = () => {
+                Penguin.magicHatImageLoaded = true;
+            };
+            Penguin.magicHatImage.onerror = () => {
+                console.error('Failed to load magic_hat.png');
+                Penguin.magicHatImageLoaded = false;
+            };
+        }
+        return Penguin.magicHatImage;
+    }
+    
+    static loadFriedEggImage() {
+        if (!Penguin.friedEggImage) {
+            Penguin.friedEggImage = new Image();
+            Penguin.friedEggImage.src = '/assets/hats/fried-egg.png';
+            Penguin.friedEggImage.onload = () => {
+                Penguin.friedEggImageLoaded = true;
+            };
+            Penguin.friedEggImage.onerror = () => {
+                console.error('Failed to load fried-egg.png');
+                Penguin.friedEggImageLoaded = false;
+            };
+        }
+        return Penguin.friedEggImage;
+    }
+    
+    static loadPartyHatImage() {
+        if (!Penguin.partyHatImage) {
+            Penguin.partyHatImage = new Image();
+            Penguin.partyHatImage.src = '/assets/hats/party-hat.png';
+            Penguin.partyHatImage.onload = () => {
+                Penguin.partyHatImageLoaded = true;
+            };
+            Penguin.partyHatImage.onerror = () => {
+                console.error('Failed to load party-hat.png');
+                Penguin.partyHatImageLoaded = false;
+            };
+        }
+        return Penguin.partyHatImage;
+    }
+    
+    static loadCowboyHatImage() {
+        if (!Penguin.cowboyHatImage) {
+            Penguin.cowboyHatImage = new Image();
+            Penguin.cowboyHatImage.src = '/assets/hats/cowboy.png';
+            Penguin.cowboyHatImage.onload = () => {
+                Penguin.cowboyHatImageLoaded = true;
+            };
+            Penguin.cowboyHatImage.onerror = () => {
+                console.error('Failed to load cowboy.png');
+                Penguin.cowboyHatImageLoaded = false;
+            };
+        }
+        return Penguin.cowboyHatImage;
+    }
+    
+    static loadPokemonHatImage() {
+        if (!Penguin.pokemonHatImage) {
+            Penguin.pokemonHatImage = new Image();
+            Penguin.pokemonHatImage.src = '/assets/hats/pokemon.png';
+            Penguin.pokemonHatImage.onload = () => {
+                Penguin.pokemonHatImageLoaded = true;
+            };
+            Penguin.pokemonHatImage.onerror = () => {
+                console.error('Failed to load pokemon.png');
+                Penguin.pokemonHatImageLoaded = false;
+            };
+        }
+        return Penguin.pokemonHatImage;
+    }
     
     constructor(x, y, color, hat, id, isLocal = false) {
         this.x = x;
@@ -501,45 +586,84 @@ class Penguin {
         
         switch (this.hat) {
             case 'party':
-                // Party hat (triangle)
-                ctx.fillStyle = '#FF6B9D';
-                ctx.beginPath();
-                ctx.moveTo(0, hatY);
-                ctx.lineTo(-6, hatY + 8);
-                ctx.lineTo(6, hatY + 8);
-                ctx.closePath();
-                ctx.fill();
-                ctx.strokeStyle = '#2C2C2C';
-                ctx.lineWidth = 1;
-                ctx.stroke();
+                // Party hat - use image if available
+                if (Penguin.partyHatImageLoaded && Penguin.partyHatImage) {
+                    const hatWidth = 14;
+                    const hatHeight = 16;
+                    ctx.drawImage(
+                        Penguin.partyHatImage,
+                        -hatWidth / 2,
+                        hatY - 8, // Moved higher (was hatY, now hatY - 2)
+                        hatWidth,
+                        hatHeight
+                    );
+                } else {
+                    // Fallback: draw party hat (triangle)
+                    ctx.fillStyle = '#FF6B9D';
+                    ctx.beginPath();
+                    ctx.moveTo(0, hatY - 2); // Moved higher (was hatY, now hatY - 2)
+                    ctx.lineTo(-6, hatY + 6); // Adjusted (was hatY + 8, now hatY + 6)
+                    ctx.lineTo(6, hatY + 6); // Adjusted (was hatY + 8, now hatY + 6)
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.strokeStyle = '#2C2C2C';
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                }
                 break;
                 
             case 'egg':
-                // Egg hat
-                ctx.fillStyle = '#FFF8DC';
-                ctx.beginPath();
-                ctx.ellipse(0, hatY + 4, 5, 6, 0, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.strokeStyle = '#2C2C2C';
-                ctx.lineWidth = 1;
-                ctx.stroke();
+                // Egg hat - use image if available
+                if (Penguin.friedEggImageLoaded && Penguin.friedEggImage) {
+                    const hatWidth = 14;
+                    const hatHeight = 12;
+                    ctx.drawImage(
+                        Penguin.friedEggImage,
+                        -hatWidth / 2,
+                        hatY - 2, // Moved higher (was +2, now -2)
+                        hatWidth,
+                        hatHeight
+                    );
+                } else {
+                    // Fallback: draw egg hat
+                    ctx.fillStyle = '#FFF8DC';
+                    ctx.beginPath();
+                    ctx.ellipse(0, hatY + 2, 5, 6, 0, 0, Math.PI * 2); // Moved higher (was +4, now +2)
+                    ctx.fill();
+                    ctx.strokeStyle = '#2C2C2C';
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                }
                 break;
             
                 
             case 'magician':
-                // Magician hat (tall cone)
-                ctx.fillStyle = '#1A1A1A';
-                ctx.beginPath();
-                ctx.moveTo(0, hatY - 6);
-                ctx.lineTo(-5, hatY + 4);
-                ctx.lineTo(5, hatY + 4);
-                ctx.closePath();
-                ctx.fill();
-                ctx.strokeStyle = '#2C2C2C';
-                ctx.lineWidth = 1;
-                ctx.stroke();
-                ctx.fillStyle = '#FFD700';
-                ctx.fillRect(-4, hatY + 2, 8, 2);
+                // Magician hat - use image if available
+                if (Penguin.magicHatImageLoaded && Penguin.magicHatImage) {
+                    const hatWidth = 16;
+                    const hatHeight = 20;
+                    ctx.drawImage(
+                        Penguin.magicHatImage,
+                        -hatWidth / 2,
+                        hatY - 10, // Moved higher (was -6, now -10)
+                        hatWidth,
+                        hatHeight
+                    );
+                } else {
+                    // Fallback: draw magician hat (tall cone)
+                    ctx.fillStyle = '#1A1A1A';
+                    ctx.beginPath();
+                    ctx.moveTo(0, hatY - 10); // Moved higher (was -6, now -10)
+                    ctx.lineTo(-5, hatY + 4);
+                    ctx.lineTo(5, hatY + 4);
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.strokeStyle = '#2C2C2C';
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                    ctx.fillStyle = '#FFD700';
+                    ctx.fillRect(-4, hatY + 2, 8, 2);
+                }
                 break;
                 
             case 'bow':
@@ -556,12 +680,25 @@ class Penguin {
                 break;
                 
             case 'cowboy':
-                // Cowboy hat
-                ctx.fillStyle = '#8B4513';
-                ctx.fillRect(-8, hatY, 16, 2);
-                ctx.fillRect(-6, hatY + 2, 12, 3);
-                ctx.strokeRect(-8, hatY, 16, 2);
-                ctx.strokeRect(-6, hatY + 2, 12, 3);
+                // Cowboy hat - use image if available
+                if (Penguin.cowboyHatImageLoaded && Penguin.cowboyHatImage) {
+                    const hatWidth = 18;
+                    const hatHeight = 12;
+                    ctx.drawImage(
+                        Penguin.cowboyHatImage,
+                        -hatWidth / 2,
+                        hatY - 4,
+                        hatWidth,
+                        hatHeight
+                    );
+                } else {
+                    // Fallback: draw cowboy hat
+                    ctx.fillStyle = '#8B4513';
+                    ctx.fillRect(-8, hatY, 16, 2);
+                    ctx.fillRect(-6, hatY + 2, 12, 3);
+                    ctx.strokeRect(-8, hatY, 16, 2);
+                    ctx.strokeRect(-6, hatY + 2, 12, 3);
+                }
                 break;
                 
             case 'watermelon':
@@ -587,6 +724,31 @@ class Penguin {
                 // Brim
                 ctx.fillStyle = '#000080';
                 ctx.fillRect(-8, hatY + 2, 16, 1);
+                break;
+                
+            case 'pokemon':
+                // Pokemon hat - use image if available
+                if (Penguin.pokemonHatImageLoaded && Penguin.pokemonHatImage) {
+                    const hatWidth = 16;
+                    const hatHeight = 14;
+                    ctx.drawImage(
+                        Penguin.pokemonHatImage,
+                        -hatWidth / 2,
+                        hatY-3,
+                        hatWidth,
+                        hatHeight
+                    );
+                } else {
+                    // Fallback: draw baseball cap style
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.fillRect(-7, hatY, 14, 2);
+                    ctx.fillRect(-5, hatY + 2, 10, 3);
+                    ctx.strokeRect(-7, hatY, 14, 2);
+                    ctx.strokeRect(-5, hatY + 2, 10, 3);
+                    // Brim
+                    ctx.fillStyle = '#FF69B4';
+                    ctx.fillRect(-8, hatY + 2, 16, 1);
+                }
                 break;
                 
             case 'santa':

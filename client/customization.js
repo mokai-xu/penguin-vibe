@@ -18,7 +18,8 @@ class Customization {
             { hat: 'bow', emoji: '🎀', name: 'Red Bow' },
             { hat: 'cowboy', emoji: '🤠', name: 'Cowboy' },
             { hat: 'watermelon', emoji: '🍉', name: 'Watermelon' },
-            { hat: 'baseball', emoji: '⚾', name: 'Cap' }
+            { hat: 'baseball', emoji: '⚾', name: 'Cap' },
+            { hat: 'pokemon', emoji: '⚡️', name: 'Pokemon Hat' }
         ];
         
         this.holidayHats = [
